@@ -8,7 +8,7 @@ public class Main {
       public void run () {
         MainFrame frame = null;
 		try {
-			frame = new MainFrame("Theranos 2.0");
+			frame = new MainFrame("Expository... Will you write me?");
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
