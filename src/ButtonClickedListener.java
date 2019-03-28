@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
-public class ButtonClickedListener implements MouseListener {
+public class ButtonClickedListener implements MouseListener, ButtonListener{
     	
 	private int cooldown;
 		
@@ -55,8 +55,7 @@ public class ButtonClickedListener implements MouseListener {
     		} );
     		timer.setRepeats( false );
     		timer.start();
-    		
-    		fireHUDEvent(new HUDEvent(pressed));
+    	
 		}
 	}
 	
@@ -64,6 +63,11 @@ public class ButtonClickedListener implements MouseListener {
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 	
+	}
+
+	@Override
+	public void buttonPressed(ButtonEvent be) {
+		
 	}
 
 }

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class MainFrame extends JFrame implements ExpositoryConstant{
 	private Art visual;
-	private JTextArea story = new JTextArea();
+	private Story story = new Story();
 	private JScrollPane storyPane;
 	private PlayerHUD hud;
 	
@@ -23,12 +23,6 @@ public class MainFrame extends JFrame implements ExpositoryConstant{
 		 
 		//Create swing components
 		visual = new Art();
-		story.setEditable(false);
-		story.setLineWrap(true);
-		Font font = new Font("Helvatica", Font.PLAIN, 20);
-		story.setFont(font);
-		story.setBackground(Color.BLACK);
-		story.setForeground(Color.WHITE);
 		storyPane = new JScrollPane(story);
 		hud = new PlayerHUD();
 		
@@ -57,16 +51,26 @@ public class MainFrame extends JFrame implements ExpositoryConstant{
 	}
 	
 	public void playGame() {
+		story.append("You are sitting in a room... On a stool" + "\n");
+		hud.createButtons("Actions", false, new HashMap<String, Integer>() {{
+		    put("Explore", 5);
+		}});
+		hud.addButtonControl("Actions", "Stay Still", 5);
+		
 		hud.addHUDEventListener(new HUDEventListener() {
 			public void HUDEventOccurred(HUDEvent e) {
-				   story.append(e.toString() + "\n");
+				   String cmd = e.getBtnName();
+				   
+				   if (cmd.equals("Explore")) {
+					   story.displayText("You looked around the room and noticed that it was not wide. Five feet across in each direction at most."
+					   		+ " Smooth grey granite covered everything save for a blacked-out slab of glass directly in front of you."
+					   		+ "\n");
+				   } else if (cmd.equals("Stay Still")) {
+					   story.displayText("You carried on sitting on the stool you sat on, no recollection of the past..."
+					   		+ "\n");
+				   }
 			}
 		});
 		
-		story.append("You are sitting in a room... On a stool" + "\n");
-		hud.createButtons("Actions", false, new HashMap<String, Integer>() {{
-		    put("Explore", 1);
-		}});
-		hud.addButtonControl("Actions", "Stay Still", 4);
 	}
 }

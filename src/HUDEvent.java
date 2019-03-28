@@ -1,8 +1,15 @@
 import java.util.EventObject;
 
 public class HUDEvent extends EventObject {
-	public HUDEvent (Object source) {
+	private String btnName = "";
+	
+	public HUDEvent (Object source, String btnName) {
 		super (source);
+		this.btnName = btnName;
+	}
+	
+	public String getBtnName () {
+		return btnName;
 	}
 }
  

@@ -24,8 +24,8 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 	
 	public PlayerHUD () throws IllegalAccessException {
 		setLayout(new GridBagLayout()); 
-		gc.weightx = 1;
-		gc.weighty = 1;
+		gc.weightx = WEIGHT_X;
+		gc.weighty = WEIGHT_Y;
 	}
 
 	public void createButtons (String controlTitle, boolean displayTitle, HashMap<String, Integer> buttonsToAdd) {
@@ -35,8 +35,9 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 			buttonControls.addBtn(name, buttonsToAdd.get(name));
 		}
 		buttonControls.addButtonListener(new ButtonListener() {
-			public void buttonEventOccurred (HUDEvent be) {
-				fireHUDEvent(new HUDEvent(be));
+			@Override
+			public void buttonPressed(ButtonEvent be) {
+				fireHUDEvent(new HUDEvent(be, be.getBtnName()));
 			}
 		});
 		controlsDB.put(controlTitle, buttonControls);
@@ -67,8 +68,9 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 		add(inven, gc);
 	}
 	
-	public void addInvenItem (String invenTitle, String item, int Quantity) {
-		
+	public void addInvenItem (String invenTitle, String item, int quantity) {
+		Inventory inven = invenDB.get(invenTitle);
+		inven.addEntry(item, quantity);
 	}
 	
 	public void fireHUDEvent(HUDEvent e) {
