@@ -1,4 +1,4 @@
-import javax.swing.*;
+														import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
@@ -67,5 +67,6 @@ public class MainFrame extends JFrame implements ExpositoryConstant{
 		hud.createButtons("Actions", false, new HashMap<String, Integer>() {{
 		    put("Explore", 1);
 		}});
+		hud.addButtonControl("Actions", "Stay Still", 4);
 	}
 }

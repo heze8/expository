@@ -12,7 +12,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 public class Inventory extends JPanel implements ExpositoryConstant {
-	private String titleString;
 	private int currRow = 0;
 	private GridBagConstraints gc = new GridBagConstraints();
 	private HashMap<String, JLabel> inventoryDB = new HashMap<String, JLabel>();
@@ -24,7 +23,6 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	 * @param titleString is of type String, provides the title for the inventory
 	 */
 	public Inventory (String titleString) {
-		this.titleString = titleString;
 		
 		TitledBorder title;
 		title = BorderFactory.createTitledBorder(titleString);

@@ -18,7 +18,13 @@
 		<link>
 			<name>src/ExpositoryConstant.class</name>
 			<type>1</type>
-			<locationURI>PROJECT_LOC/bin/ExpositoryConstant.class</locationURI>
+			<locationURI>copy_PROJECT_LOC/bin/ExpositoryConstant.class</locationURI>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>copy_PROJECT_LOC</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D/Repl.it%20Game%20Jam/expository</value>
+		</variable>
+	</variableList>
 </projectDescription>
