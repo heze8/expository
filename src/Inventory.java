@@ -71,14 +71,20 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	 * @return an int, representing the quantity associated with @param name.
 	 * @throws IllegalAccessException if the @param name is not found within the inventoryDB
 	 */
-	public int getQuantity(String name) throws IllegalAccessException {
+	public int getQuantity(String name) {
 		JLabel quantity = inventoryDB.get(name);
-		if (quantity != null) {
-			int quant = Integer.parseInt(quantity.getText());
-			return quant;			
-		} else {
+		try{
+			if (quantity != null) {
+				int quant = Integer.parseInt(quantity.getText());
+				return quant;			
+			} 
+			else {
+				throw new IllegalAccessException();
+			} 
+		}
+		catch(IllegalAccessException e) {
 			System.out.println("Item " + name + " does not exist in inventory!");
-			throw new IllegalAccessException();
+			return 0;
 		}
 	}
 	
