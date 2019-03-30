@@ -79,6 +79,7 @@ public class Button extends JPanel implements ExpositoryConstant {
 						@Override
 						public void actionPerformed( ActionEvent e ){
 							//pressed.setText(String.valueOf(--timeToClickable));
+							timeToClickable --;
 							if (timeToClickable == 0) {
 								pressed.setForeground(Color.BLACK);
 								pressed.setBackground(Color.BLACK);

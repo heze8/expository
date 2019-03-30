@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Map;	
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -13,7 +13,7 @@ public class Control extends JPanel implements ExpositoryConstant {
 	Map<String, JLabel> buttonMap = new HashMap<String, JLabel>();
 	
 	public Control() {
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 	}
 	
 	public void addBtn(String text) {

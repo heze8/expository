@@ -1,35 +1,68 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
 import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.border.*;
 
-public class Story extends JTextArea implements ExpositoryConstant {
+public class Story extends JPanel implements ExpositoryConstant {
+	Font font = new Font("Helvatica", Font.PLAIN, 20);
+	ArrayList<JLabel> messages = new ArrayList<JLabel>();
+	
 	public Story () {
-		setEditable(false);
-		setLineWrap(true);
-		Font font = new Font("Helvatica", Font.PLAIN, 20);
-		setFont(font);
-		setBackground(Color.BLACK);
-		setForeground(Color.WHITE);
+		this.setFont(font);
+		this.setBackground(Color.BLACK);
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setPreferredSize(new Dimension(STORY_WIDTH_PREFF, STORY_HEIGHT_PREFF));
 	}
 	
 	public void displayText (String text) {
-		Timer timer = new Timer(TEXT_DISP_DELAY, null);
-		timer.addActionListener(new ActionListener() {
-			int currPos = 0;
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	append(String.valueOf(text.charAt(currPos++)));
-            	if (currPos >= text.length()) {
-                    timer.stop();
-                }
-            }
-		});
-		timer.start();
+		this.removeAll();
+		JLabel toDisplay = createLabel(text);
+		this.add(toDisplay);
+        messages.add(toDisplay);
+        fadeInText(messages);
+	}
+	private JLabel createLabel(String text) {
+		JLabel toDisplay = new JLabel();
+		toDisplay.setText("<html>" + text + "</html>");
+		toDisplay.setFont(font);
+		toDisplay.setForeground(new Color( 0, 0, 0));
+		Border margin = new EmptyBorder(STORY_MARGIN, STORY_MARGIN, STORY_MARGIN, STORY_MARGIN);
+        toDisplay.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(), margin));
+        return toDisplay;
 	}
 	
+	private void fadeInText(ArrayList<JLabel> messages) {
+		if (messages.size() > MAX_MSG) {
+			messages.remove(0);
+		}		
+		int visibility = VISIBLE;
+		for (int i = messages.size() - 2; i >= 0; i --) {
+			visibility -= COLOR_FADE_INCREMENT;
+			messages.get(i).setForeground(new Color (visibility, visibility, visibility));
+			this.add(messages.get(i));
+		}
+        
+		JLabel newestMsg = messages.get(messages.size() - 1);
+        Timer timer = new Timer (TEXT_FADE_UPDATE, null);
+		timer.addActionListener(new ActionListener () {
+			int visibilty = INVINSIBLE;
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				visibilty += TEXT_FADE_DELAY;
+				if (visibilty < VISIBLE) {
+					//newestMsg.revalidate();
+					newestMsg.setForeground(new Color(visibilty, visibilty, visibilty));
+				} else {
+					timer.stop();
+				}
+			}
+			
+		});
+        timer.start();
+	}
 
 	
 }
