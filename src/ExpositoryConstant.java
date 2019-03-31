@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 /*
  * FileName: ExpositoryConstant.java
  * --------------------------------
@@ -8,12 +10,15 @@ public interface ExpositoryConstant {
 	public static final int APPLICATION_WIDTH = 1280;
 	public static final int APPLICATION_HEIGHT = 720;
 	
+	public static final Color BG_COLOR = Color.BLACK;
+	
 	/////////////////////////
 	// PlayerHUD CONSTANTS //
 	/////////////////////////
-	/* Constant for PlayerHUD weight */
-	public static final int WEIGHT_X = 1;
-	public static final int WEIGHT_Y = 1;
+	/* Constant for PlayerHUD control colors */
+	public static final Color NORMAL_COLOR = Color.WHITE;
+	public static final Color CLICKED_COLOR = Color.RED;
+	public static final Color HOVER_COLOR = Color.LIGHT_GRAY;
 	
 	/* Constant for the margin of the text labels for controls */
 	public static final int MARGIN_TOP_BOTTOM_CONTROL = 10;
@@ -28,6 +33,10 @@ public interface ExpositoryConstant {
 	/////////////////////////
 	// Inventory CONSTANTS //
 	/////////////////////////
+	/* Constants for the width and height of inventory */
+	public static final int INVEN_WIDTH_PREFF = 220;
+	public static final int INVEN_HEIGHT_PREFF = 720;
+	
 	/* Constant for the Inventory margins */
 	public static final int MARGIN_TOP_BOTTOM_INVEN= 10;
 	public static final int INVENTORY_WIDTH_MARGIN = 10;

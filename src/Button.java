@@ -17,7 +17,8 @@ public class Button extends JPanel implements ExpositoryConstant {
 	 * if set to true.
 	 */
 	public Button (String controlTitle, boolean displayTitle) {
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setBackground(BG_COLOR);
 		if (displayTitle) {
 			Border empty = BorderFactory.createEmptyBorder();
 			TitledBorder title = BorderFactory.createTitledBorder(empty, controlTitle);
@@ -39,25 +40,25 @@ public class Button extends JPanel implements ExpositoryConstant {
         		, MARGIN_TOP_BOTTOM_CONTROL
         		, marginLeftRight);
         newBtn.setBorder(new CompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), margin));
-        newBtn.setForeground(Color.BLACK);
-        newBtn.setBackground(Color.BLACK);
+        newBtn.setForeground(NORMAL_COLOR);
+        newBtn.setBackground(NORMAL_COLOR);
         
         newBtn.addMouseListener(new MouseAdapter () {
         	@Override
         	public void mouseEntered(MouseEvent arg0) {
         		JLabel pressed = (JLabel)arg0.getSource();		
-        		if (pressed.getForeground() != Color.RED) {
-        			pressed.setForeground(Color.LIGHT_GRAY);
-        			pressed.setBackground(Color.LIGHT_GRAY);	
+        		if (pressed.getForeground() != CLICKED_COLOR) {
+        			pressed.setForeground(HOVER_COLOR);
+        			pressed.setBackground(HOVER_COLOR);
         		}
         	}
 
         	@Override
         	public void mouseExited(MouseEvent arg0) {
         		JLabel pressed = (JLabel)arg0.getSource();
-        		if (pressed.getForeground() != Color.RED) {
-        			pressed.setForeground(Color.BLACK);
-        			pressed.setBackground(Color.BLACK);	
+        		if (pressed.getForeground() != CLICKED_COLOR) {
+        			pressed.setForeground(NORMAL_COLOR);
+        			pressed.setBackground(NORMAL_COLOR);	
         		}
         	}
 
@@ -65,11 +66,11 @@ public class Button extends JPanel implements ExpositoryConstant {
         	public void mousePressed(MouseEvent arg0) {
         		JLabel pressed = (JLabel)arg0.getSource();
         		String pressedBtnLabel = pressed.getText();
-        		if (pressed.getForeground() != Color.RED) {
+        		if (pressed.getForeground() != CLICKED_COLOR) {
         			fireButtonEvent(new ButtonEvent (pressed, pressed.getText()));
         			// Changes button color to show that button is not clickable
-        			pressed.setForeground(Color.RED);
-        			pressed.setBackground(Color.RED);
+        			pressed.setForeground(CLICKED_COLOR);
+        			pressed.setBackground(CLICKED_COLOR);
         			//pressed.setText(String.valueOf(cooldown));
         			// Changes the button color back to original after delay ms has passed
         			// Allows the button to be clicked again
@@ -81,8 +82,8 @@ public class Button extends JPanel implements ExpositoryConstant {
 							//pressed.setText(String.valueOf(--timeToClickable));
 							timeToClickable --;
 							if (timeToClickable == 0) {
-								pressed.setForeground(Color.BLACK);
-								pressed.setBackground(Color.BLACK);
+								pressed.setForeground(NORMAL_COLOR);
+								pressed.setBackground(NORMAL_COLOR);
 								//pressed.setText(pressedBtnLabel);
 								timer.stop();
 							}

@@ -12,7 +12,7 @@ public class Story extends JPanel implements ExpositoryConstant {
 	
 	public Story () {
 		this.setFont(font);
-		this.setBackground(Color.BLACK);
+		this.setBackground(BG_COLOR);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.setPreferredSize(new Dimension(STORY_WIDTH_PREFF, STORY_HEIGHT_PREFF));
 	}
