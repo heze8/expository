@@ -1,8 +1,11 @@
+package GUI;
 import java.awt.*;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+
+import ExpositoryConstant.ExpositoryConstant;
 
 public class InventoryPanel extends JPanel implements ExpositoryConstant{
 	

@@ -7,7 +7,7 @@ public class Main {
     SwingUtilities.invokeLater(new Runnable () {
       public void run () {
         MainFrame frame = null;
-		frame = new MainFrame("Expository... Will you write me?");
+		frame = new MainFrame("Simulcra");
 		if (frame != null) {
 			frame.playGame();	
 		}

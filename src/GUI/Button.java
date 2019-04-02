@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.Color;
 import java.awt.event.*;
 import java.util.HashMap;
@@ -5,6 +6,10 @@ import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.EventListenerList;
+
+import ExpositoryConstant.ExpositoryConstant;
+import GUI_Event_Handlers.ButtonEvent;
+import GUI_Event_Handlers.ButtonListener;
 
 public class Button extends JPanel implements ExpositoryConstant {
 	private HashMap<String, HashMap<JLabel, Integer>> btnDB = new HashMap<String, HashMap<JLabel, Integer>>();

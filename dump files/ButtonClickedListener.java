@@ -7,6 +7,9 @@ import java.awt.event.MouseListener;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
+import GUI_Event_Handlers.ButtonEvent;
+import GUI_Event_Handlers.ButtonListener;
+
 public class ButtonClickedListener implements MouseListener, ButtonListener{
     	
 	private int cooldown;

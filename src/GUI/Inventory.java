@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashMap;
@@ -10,6 +11,8 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+
+import ExpositoryConstant.ExpositoryConstant;
 
 public class Inventory extends JPanel implements ExpositoryConstant {
 	private int currRow = 0;

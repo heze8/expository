@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -6,8 +7,10 @@ import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.border.*;
 
+import ExpositoryConstant.ExpositoryConstant;
+
 public class Story extends JPanel implements ExpositoryConstant {
-	Font font = new Font("Helvatica", Font.PLAIN, 20);
+	Font font = new Font(STORY_FONT, Font.PLAIN, 20);
 	ArrayList<JLabel> messages = new ArrayList<JLabel>();
 	
 	public Story () {

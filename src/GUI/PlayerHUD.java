@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -6,6 +7,12 @@ import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.EventListenerList;
+
+import ExpositoryConstant.ExpositoryConstant;
+import GUI_Event_Handlers.ButtonEvent;
+import GUI_Event_Handlers.ButtonListener;
+import GUI_Event_Handlers.HUDEvent;
+import GUI_Event_Handlers.HUDEventListener;
 
 public class PlayerHUD extends JPanel implements ExpositoryConstant {
 	

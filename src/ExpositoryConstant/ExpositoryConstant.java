@@ -1,3 +1,6 @@
+package ExpositoryConstant;
+
+
 import java.awt.Color;
 
 /*
@@ -10,13 +13,16 @@ public interface ExpositoryConstant {
 	public static final int APPLICATION_WIDTH = 1280;
 	public static final int APPLICATION_HEIGHT = 720;
 	
+	/* Constants for the color scheme of text in the game */
 	public static final Color BG_COLOR = Color.BLACK;
+	public static final Color NORMAL_COLOR = Color.WHITE;
 	
+	/* Constant for mainGUI position in cardLayout display */
+	public static final String MAIN_GUI = "1";
 	/////////////////////////
 	// PlayerHUD CONSTANTS //
 	/////////////////////////
 	/* Constant for PlayerHUD control colors */
-	public static final Color NORMAL_COLOR = Color.WHITE;
 	public static final Color CLICKED_COLOR = Color.RED;
 	public static final Color HOVER_COLOR = Color.LIGHT_GRAY;
 	
@@ -26,10 +32,7 @@ public interface ExpositoryConstant {
 	
 	/* Constant for conversion of cooldown value from seconds to milliseconds for button controls */
 	public static final int CONVERT_TO_MSEC = 1000;
-	
-	/* Constant for the col where the controls will appear at for PlayerHUD */
-	public static final int CONTROL_COL = 0;
-	
+		
 	/////////////////////////
 	// Inventory CONSTANTS //
 	/////////////////////////
@@ -40,9 +43,6 @@ public interface ExpositoryConstant {
 	/* Constant for the Inventory margins */
 	public static final int MARGIN_TOP_BOTTOM_INVEN= 10;
 	public static final int INVENTORY_WIDTH_MARGIN = 10;
-	
-	/* Constant for the col where the inventory will appear at for PlayerHUD */
-	public static final int INVENTORY_COL = 1;
 	
 	
 	/////////////////////
@@ -73,4 +73,14 @@ public interface ExpositoryConstant {
 	public static final int VISIBLE = 255;
 	public static final int COLOR_FADE_INCREMENT = 20;
 	public static final int INVINSIBLE = 0;
+	
+	//////////////////////
+	// Laptop CONSTANTS //
+	//////////////////////
+	/* Constant for laptop position in cardLayout display */
+	public static final String LAPTOP = "2";
+	
+	/* Constant for the Laptop history display */
+	public static final int MOST_RECENT = 1;
+	public static final int OLDEST = 2;
 }

@@ -1,14 +1,26 @@
 														import javax.swing.*;
+
+import ExpositoryConstant.ExpositoryConstant;
+import GUI.InventoryPanel;
+import GUI.PlayerHUD;
+import GUI.Story;
+import GUI_Event_Handlers.HUDEvent;
+import GUI_Event_Handlers.HUDEventListener;
+
 import java.awt.*;
 import java.util.HashMap;
 
 public class MainFrame extends JFrame implements ExpositoryConstant{
+	private CardLayout cl = new CardLayout();
+	private JPanel container;
+	private JPanel mainGUI;
 	private Story story;
 	private PlayerHUD hud;
 	private InventoryPanel inven;
+	private Laptop laptop = new Laptop();
 	
 	public MainFrame(String title) {
-		super(title);	
+		this.setTitle(title);	
 		this.setSize(APPLICATION_WIDTH, APPLICATION_HEIGHT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -16,19 +28,24 @@ public class MainFrame extends JFrame implements ExpositoryConstant{
 	}
 	
 	private void loadGUI() {
-		//Set Layout Manager
-		setLayout(new BorderLayout());
-		 
-		//Create swing components
+		
+		//Creating the main GUI where most of the game will happen
+		mainGUI = new JPanel(new BorderLayout());
+		//Create swing components for mainGUI
 		hud = new PlayerHUD();
 		story = new Story();
 		inven = new InventoryPanel();
+		//Add swing components to mainGUI JPanel
+		mainGUI.add(story, BorderLayout.LINE_START);
+		mainGUI.add(hud, BorderLayout.CENTER);
+		mainGUI.add(inven, BorderLayout.LINE_END);
 		
-		//Add swing components to pane)
-		add(story, BorderLayout.LINE_START);
-		add(hud, BorderLayout.CENTER);
-		add(inven, BorderLayout.LINE_END);
+		//Creating the container to hold the various other screens. Initialized to CardLayout
+		container = new JPanel(cl);
+		container.add(mainGUI, MAIN_GUI);
+		container.add(laptop, LAPTOP);
 		
+		this.add(container);
 	}
 	
 	public void playGame() {
@@ -37,6 +54,8 @@ public class MainFrame extends JFrame implements ExpositoryConstant{
 		    put("Explore", 1);
 		}});
 		hud.addButtonControl("Actions", "Stay Still", 1);
+		hud.addButtonControl("Actions", "Browse Laptop", 5);
+		
 		
 		hud.addHUDEventListener(new HUDEventListener() {
 			public void HUDEventOccurred(HUDEvent e) {
@@ -48,12 +67,26 @@ public class MainFrame extends JFrame implements ExpositoryConstant{
 				   } else if (cmd.equals("Stay Still")) {
 					   story.displayText("You carried on sitting on the stool you sat on, no recollection of the past..."
 					   		+ "\n");
-				   } else if (cmd.equals("Browse Latop")) {
-					   Laptop laptop = new Latop();
-					   latop.run();
+				   } else if (cmd.equals("Browse Laptop")) {
+					   cl.show(container, LAPTOP);
+					   laptop.addConsoleListener(new ConsoleListener() {
+							@Override
+							public String receiveCommand(String command) {
+								if (command.equals("ls")) {
+									String toReturn = "- Simulcra.exe <br>- Hacks and cheats";
+									System.out.println(toReturn);
+									return toReturn;
+								}
+								return "";
+							}
+						});
+					   laptop.runLaptop();
+					   laptop.print("Welcome");
 				   }
 			}
 		});
+		
+		
 		
 	}
 }
