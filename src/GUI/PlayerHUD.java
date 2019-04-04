@@ -81,12 +81,12 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 		for (String name : buttonsToAdd.keySet()) {
 			plusMinusControls.addPlusMinus(buttonsToAdd.get(name), name, true);
 		}
-		plusMinusControls.addButtonListener(new ButtonListener() {
-			@Override
-			public void buttonPressed(ButtonEvent be) {
-				fireHUDEvent(new HUDEvent(be, be.getBtnName()));
-			}
-		});
+//		plusMinusControls.addPlusMinusListener(new PlusMinusListener() {
+//			@Override
+//			public boolean plusMinusClicked(String command) {
+//				fireHUDEvent(new HUDEvent(be, be.getBtnName()));
+//			}
+//		});
 		plusMinusDB.put(controlTitle, plusMinusControls);
 		add(plusMinusControls);	
 	}

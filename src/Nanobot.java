@@ -1,14 +1,25 @@
 import java.awt.*;
+import java.util.HashMap;
 
 import javax.swing.*;
 
 import ExpositoryConstant.ExpositoryConstant;
 import GUI.Button;
 import GUI.PlusMinusBtn;
+import GUI.PlusMinusListener;
+import GUI_Event_Handlers.ButtonEvent;
+import GUI_Event_Handlers.ButtonListener;
 
 public class Nanobot extends JPanel implements ExpositoryConstant {
-	private int capacity = 5;
-
+	private int maxFreeCapacity = 5;
+	private int currFreeCapacity = maxFreeCapacity;
+	private Button fuel;
+	private Button health;
+	private Button upgrade;
+	private PlusMinusBtn parameters;
+	private JPanel controls;
+	private HashMap<String, Integer> params = new HashMap<String, Integer>();
+		
 	public Nanobot (String name) {
 		this.setLayout(new BorderLayout());
 		this.setBackground(BG_COLOR);
@@ -25,41 +36,69 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 	}
 
 	private void addControls() {
-		JPanel controls = new JPanel();
+		controls = new JPanel();
 		controls.setBackground(BG_COLOR);
 		controls.setLayout(new FlowLayout(FlowLayout.LEADING));
 		initControlsPanel(controls);
 		add(controls, BorderLayout.CENTER);
-		
 	}
 
 	private void initControlsPanel(JPanel controls) {
-		Button fuel = new Button("Fuel", true);
+		fuel = new Button("Fuel", false);
 		fuel.addBtn("Fuel", 20, true);
 		
-		Button health = new Button("Health", true);
-		health.addBtn("Health", 20, true);
+		health = new Button("Health", false);
+		health.addBtn("Repair", 20, true);
 		
-		Button upgrade = new Button("Upgrade", true);
-		upgrade.addBtn("Upgrade", 20, true);
+		upgrade = new Button("Capacity: " + currFreeCapacity + "/" + maxFreeCapacity, true);
+		upgrade.addBtn("Upgrade", NO_WAIT, true);
+		upgrade.addButtonListener(new ButtonListener () {
+			public void buttonPressed (ButtonEvent be) {
+				upgrade();
+			}
+		});
 		
-		PlusMinusBtn water = new PlusMinusBtn("Parameters", false);
-		water.addPlusMinus(0, "Water", true);
+		parameters = new PlusMinusBtn("Parameters", false);
+		parameters.addPlusMinus(0, "Water", true);
+		params.put("Water", 0);
+		parameters.addPlusMinusListener(new PlusMinusListener () {
+			public boolean plusMinusClicked (String command, String param) {
+				boolean canIncrement = false;
+				if (command.equals(DECREASE)) {
+					if (currFreeCapacity < maxFreeCapacity) {
+						currFreeCapacity ++;
+						params.put(param, params.get(param) - 1);
+						canIncrement = true;
+					}
+				} else if (command.equals(INCREASE)) {
+					if (currFreeCapacity > 0) {
+						currFreeCapacity --;
+						params.put(param, params.get(param) + 1);
+						canIncrement = true;
+					}
+				}
+				upgrade.setTitle("Capacity: " + currFreeCapacity + "/" + maxFreeCapacity);
+				upgrade.repaint();
+				return canIncrement;
+			}
+		});
 		
 		controls.add(fuel);
 		controls.add(health);
-		controls.add(water);
+		controls.add(parameters);
 		controls.add(upgrade);
 		
 	}
 
 	public void addParam (String param) {
-		PlusMinusBtn newParam = new PlusMinusBtn("Parameters", false);
-		newParam.addPlusMinus(0, param, true);
-		add(newParam);
+		parameters.addPlusMinus(0, param, true);
+		params.put(param, 0);
 	}
 	
 	public void upgrade() {
-		
+		maxFreeCapacity += 5;
+		currFreeCapacity += 5;
+		upgrade.setTitle("Capacity: " + currFreeCapacity + "/" + maxFreeCapacity);
+		upgrade.repaint();
 	}
 }

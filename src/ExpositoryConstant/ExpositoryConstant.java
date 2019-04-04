@@ -29,6 +29,20 @@ public interface ExpositoryConstant {
 	/* Constants for PlayerHUD overall margin */
 	public static final int PLAYER_HUD_MARGIN = 10;
 	
+	////////////////////////////////////
+	// PlusMinus and Button CONSTANTS //
+	////////////////////////////////////
+	/* Constants for the JLabel extraction in PlusMinus class when incrementing/decreasing it*/
+	public static final int JLABEL = 2;
+	
+	/* Constant for JLabel extraction in Button class when changing name */
+	public static final int JLABEL_TO_CHANGE = 0;
+	public static final int COOLDOWN = 1;
+	
+	/* Constant for plusMinusBtn class for event firing */
+	public static final String DECREASE = "Decrease";
+	public static final String INCREASE = "Increase";
+	
 	/* Constant for PlayerHUD control colors */
 	public static final Color CLICKED_COLOR = Color.RED;
 	public static final Color HOVER_COLOR = Color.LIGHT_GRAY;
@@ -39,7 +53,10 @@ public interface ExpositoryConstant {
 	
 	/* Constant for conversion of cooldown value from seconds to milliseconds for button controls */
 	public static final int CONVERT_TO_MSEC = 1000;
-		
+	
+	/* Constant for buttons ot have no cooldown time */
+	public static final int NO_WAIT = 0;
+	
 	/////////////////////////
 	// Inventory CONSTANTS //
 	/////////////////////////
@@ -88,7 +105,8 @@ public interface ExpositoryConstant {
 	public static final String LAPTOP = "2";
 	
 	/* Constant for the password hashCode */
-	public static final int PASSWORD = 2147483647; //vision gives the same hashCode.
+	public static final float PASSWORD = 1417332055813389L;
+	public static final float AUTHORISATION_CODE = 1999L;
 	public static final int HASH_CONSTANT = 31;
 	
 	/* Constant for Laptop userName */

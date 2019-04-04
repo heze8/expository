@@ -30,4 +30,8 @@ public class InventoryPanel extends JPanel implements ExpositoryConstant{
 		Inventory inven = invenDB.get(invenTitle);
 		inven.addEntry(item, quantity);
 	}
+
+	public Inventory getInventory(String inventoryName) {
+		return invenDB.get(inventoryName);
+	}
 }

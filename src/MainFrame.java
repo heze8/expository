@@ -1,11 +1,8 @@
 import javax.swing.*;
 
 import ExpositoryConstant.ExpositoryConstant;
-import GUI.InventoryPanel;
-import GUI.PlayerHUD;
-import GUI.Story;
-import GUI_Event_Handlers.HUDEvent;
-import GUI_Event_Handlers.HUDEventListener;
+import GUI.*;
+import GUI_Event_Handlers.*;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -74,23 +71,30 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 	public void playGame() {
 		story.displayText("The World Comes into Vision");
 		yourRoom.createButtons("Actions", false, new HashMap<String, Integer>() {{
-		    put ("Explore", 1);
-		    put ("Stay Still", 1);
+		    put ("Explore", NO_WAIT);
+		    put ("Stay Still", NO_WAIT);
 		}}, true);
 		location.createButtons("Your Room", false, new HashMap<String, Integer> () {{
-			put ("A Place", 1);
+			put ("A Place", NO_WAIT);
 		}}, false);
 		location.createButtons("Spaceship", false, new HashMap<String, Integer> () {{
-			put ("|    Spaceship     |", 1);
+			put ("|    Spaceship     |", NO_WAIT);
 		}}, false);
 		location.createButtons("Dust", false, new HashMap<String, Integer> () {{
-			put ("Dust", 1);
+			put ("Dust", NO_WAIT);
 		}}, false);
 		
 		
 		Nanobot test = new Nanobot("TestBot");
+//		test.addNanobotListener(new NanobotListener() {
+//			public void nanobotEventOccurred (HashMap<String, Integer> valuesForUpdating) {
+//				Inventory stores = inven.getInventory("Stores");
+//				for (String name : valuesForUpdating.keySet()) {
+//					stores.updateQuantity(name, stores.getQuantity(name) + valuesForUpdating.get(name));
+//				}
+//			}
+//		});
 		spaceShip.add(test);
-		
 		
 		yourRoom.addHUDEventListener(this);
 		spaceShip.addHUDEventListener(this);
@@ -108,7 +112,8 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 		   if (storyText.getExploreState() == Integer.parseInt(LAPTOP)) {
 			   yourRoom.addButtonControl("Actions", "Browse Laptop", 5, true);
 		   } else if (storyText.getExploreState() == NANOBOT) {
-			   location.addButtonControl("Locations", "A Wrecked Room", 0, false);
+			   	location.addButtonControl("Locations", "A Wrecked Room", 0, false);
+				
 		   }
 	   } else if (cmd.equals("Stay Still")) {
 		   story.displayText("You carried on sitting on the stool you sat on, no recollection of the past..."

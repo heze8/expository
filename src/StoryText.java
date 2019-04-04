@@ -78,9 +78,10 @@ public class StoryText implements ExpositoryConstant {
 					+ "\n> :switch sim"
 					+ "\n> :exit sim"
 					+ "\n> :LeaveApp"
-					+ "\n" + USERNAME;	
+					+ "\n\n" + USERNAME;	
 		} else if (command.equals(":switch sim")) {
-			
+			toReturn = "\n> :/real\n"
+					+ "\n" + USERNAME;
 		} else if (command.equals(":exit sim")) {
 			toReturn = "Authorized access required.\n" 
 					+ "Enter authentication code: ";
@@ -88,13 +89,22 @@ public class StoryText implements ExpositoryConstant {
 			toReturn = "Desktop Apps:\n"
 					+ "> :Simulcra.exe\n"
 					+ "> :exit\n"
-					+ USERNAME;
+					+ "\n" + USERNAME;
 		} else if (command.equals(":/real")) {
-			
+			toReturn = "You are about to simulate the present reality. "
+					+ "Please be aware that this is a hard simulation, all effects are real and have repercussions. "
+					+ "No protocols have been set in place.\n" + 
+					"Continue... Y/N."
+					+ "\n" + USERNAME;
 		} else if (command.equals("Y") || command.equals("y") || command.equals("Yes") || command.equals("yes")) {
-			
+			toReturn = "Reality Simulated..."
+					+ "\n" + USERNAME;
 		} else if (command.equals("N") || command.equals("n") || command.equals("No") || command.equals("no")) {
-			
+			toReturn = "Perhaps an ultimately wise choice..."
+					+ "\n" + USERNAME;
+		} else if (laptop.hash(command) == AUTHORISATION_CODE) {
+			toReturn = "Simulation exited..."
+					+ "\n" + USERNAME;
 		}
 		return toReturn;
 	}

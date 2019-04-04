@@ -35,6 +35,7 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 	
 	public LatopText() {
 		console.setEditable(false);
+		console.setLineWrap(true);
 		DefaultCaret caret = (DefaultCaret)console.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		console.setBackground(BG_COLOR);
@@ -106,8 +107,8 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 		logIn = loginStatus;
 	}
 	
-	public static int hash(String commandResponse) {
-		int hashCode = 0;
+	public static long hash(String commandResponse) {
+		long hashCode = 0;
 		
 		for (int i = 0; i < commandResponse.length(); i ++) {
 			hashCode += Math.pow(HASH_CONSTANT, i) * ((int)commandResponse.charAt(i));
@@ -196,6 +197,10 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 	 * or the earlier cmds.
 	 */
 	private void displayHistory(int toDisplay) {
+		String text = console.getText();
+		text = text.substring(0, text.length() - currentString.size());
+		console.setText(text);
+		
 		if (historyString.isEmpty()) {
 			System.out.println("HISTROY IS EMPTY :(");
 			return;
@@ -219,6 +224,7 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 			String history = historyString.get((historyString.size() - historyIndex) % historyString.size());
 			currentString.fromString(history.split(""));	
 		}
+		
 		
 		printText(currentString.toString());
 	}

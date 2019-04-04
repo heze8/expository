@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
 import java.util.HashMap;
+import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -13,8 +14,9 @@ import GUI_Event_Handlers.ButtonEvent;
 import GUI_Event_Handlers.ButtonListener;
 
 public class Button extends JPanel implements MouseListener, ExpositoryConstant {
-	private HashMap<String, HashMap<JLabel, Integer>> btnDB = new HashMap<String, HashMap<JLabel, Integer>>();
+	private HashMap<String, Vector> btnDB = new HashMap<String, Vector>();
 	private EventListenerList listenerList = new EventListenerList();
+	private TitledBorder titleBorder;
 	private String title;
 	
 	/**
@@ -24,18 +26,18 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 	 * if set to true.
 	 */
 	public Button (String controlTitle, boolean displayTitle) {
-		this.title = controlTitle;
+		title = controlTitle;
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.setBackground(BG_COLOR);
 		if (displayTitle) {
 			Border empty = BorderFactory.createEmptyBorder();
-			TitledBorder title = BorderFactory.createTitledBorder(empty, 
+			titleBorder = BorderFactory.createTitledBorder(empty, 
 					controlTitle, 
 					TitledBorder.CENTER, 
 					TitledBorder.TOP, 
 					new Font (STORY_FONT, Font.BOLD, 12), 
 					NORMAL_COLOR);
-			setBorder(title);
+			setBorder(titleBorder);
 		}
 	}
 	
@@ -61,15 +63,33 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
         newBtn.addMouseListener(this);
         add(newBtn);
         
-        btnDB.put(name, new HashMap<JLabel, Integer>(){{
-        	put (newBtn, cooldown);
-        }});
+       Vector data = new Vector();
+       data.add(newBtn);
+       data.add(cooldown);
+       btnDB.put(name, data);
 	}
 	
 	public String getTitle() {
 		return title;
 	}
 	
+	public void setTitle(String newTitle) {
+		titleBorder.setTitle(newTitle);
+	}
+	
+	public void changeBtnName(String oldName, String newName) {
+		Vector data = btnDB.get(oldName);
+		JLabel labelToChange = (JLabel) data.get(JLABEL_TO_CHANGE);
+		labelToChange.setText(newName);
+		btnDB.remove(oldName);
+		btnDB.put(newName, data);
+	}
+	
+	public void addToolTip (String name) {
+		Vector data = btnDB.get(name);
+		JLabel labelToAddTooltip = (JLabel) data.get(JLABEL_TO_CHANGE);
+		labelToAddTooltip.setToolTipText(TOOL_TIP_TEXT_KEY);
+	}
 	
 	
 	public void fireButtonEvent (ButtonEvent be) {
@@ -121,8 +141,9 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		JLabel pressed = (JLabel)arg0.getSource();
+		JLabel pressed = (JLabel)arg0.getSource();		
 		String pressedBtnLabel = pressed.getText();
+		int cooldown = (int) btnDB.get(pressedBtnLabel).get(COOLDOWN);
 		if (pressed.getForeground() != CLICKED_COLOR) {
 			fireButtonEvent(new ButtonEvent (pressed, pressed.getText(), getTitle()));
 			// Changes button color to show that button is not clickable
@@ -133,12 +154,12 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 			// Allows the button to be clicked again
     		Timer timer = new Timer(CONVERT_TO_MSEC, null);
     		timer.addActionListener(new ActionListener(){
-    			int timeToClickable = btnDB.get(pressedBtnLabel).get(pressed);
+    			int timeToClickable = (int) btnDB.get(pressedBtnLabel).get(COOLDOWN);
 				@Override
 				public void actionPerformed( ActionEvent e ){
 					//pressed.setText(String.valueOf(--timeToClickable));
 					timeToClickable --;
-					if (timeToClickable == 0) {
+					if (timeToClickable <= 0) {
 						pressed.setForeground(NORMAL_COLOR);
 						pressed.setBackground(NORMAL_COLOR);
 						//pressed.setText(pressedBtnLabel);
