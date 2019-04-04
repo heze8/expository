@@ -17,11 +17,18 @@ public interface ExpositoryConstant {
 	public static final Color BG_COLOR = Color.BLACK;
 	public static final Color NORMAL_COLOR = Color.WHITE;
 	
-	/* Constant for mainGUI position in cardLayout display */
-	public static final String MAIN_GUI = "1";
 	/////////////////////////
 	// PlayerHUD CONSTANTS //
 	/////////////////////////
+	/* Constant for various display position in cardLayout display */
+	public static final String MAIN_GUI = "1";
+	public static final String YOUR_ROOM = "1";
+	public static final String SPACESHIP = "2";
+	public static final String DUST = "3";
+	
+	/* Constants for PlayerHUD overall margin */
+	public static final int PLAYER_HUD_MARGIN = 10;
+	
 	/* Constant for PlayerHUD control colors */
 	public static final Color CLICKED_COLOR = Color.RED;
 	public static final Color HOVER_COLOR = Color.LIGHT_GRAY;
@@ -80,7 +87,28 @@ public interface ExpositoryConstant {
 	/* Constant for laptop position in cardLayout display */
 	public static final String LAPTOP = "2";
 	
+	/* Constant for the password hashCode */
+	public static final int PASSWORD = 2147483647; //vision gives the same hashCode.
+	public static final int HASH_CONSTANT = 31;
+	
+	/* Constant for Laptop userName */
+	public static final String USERNAME = "Hj72669.@234:~$> ";
+	
 	/* Constant for the Laptop history display */
 	public static final int MOST_RECENT = 1;
 	public static final int OLDEST = 2;
+	
+	/* Constant for Laptop slow printing delay*/
+	public static final int PRINT_DELAY = 50;
+	public static final int PRINT_DELAY_FAST= 10;
+	
+	/* Constant for laptop elipses print number */
+	public static final int NUMBER_OF_DOTS= 3;
+	
+	/////////////////////////
+	// StoryText CONSTANTS //
+	/////////////////////////
+	
+	/* Constants for NanoBot find */
+	public static final int NANOBOT = 7;
 }
