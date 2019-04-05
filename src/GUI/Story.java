@@ -48,6 +48,7 @@ public class Story extends JPanel implements ExpositoryConstant {
 					visibility -= COLOR_FADE_INCREMENT;
 					messages.get(i).setForeground(new Color (visibility, visibility, visibility));
 					add(messages.get(i));
+					repaint();
 				}
 			}
 		});

@@ -7,7 +7,7 @@ import GUI_Event_Handlers.*;
 import java.awt.*;
 import java.util.HashMap;
 
-public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventListener, ConsoleListener{
+public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventListener, ConsoleListener, NanobotListener{
 	private CardLayout overallContainerCL = new CardLayout();
 	private CardLayout controllerCL = new CardLayout();
 	private JPanel mainContainer;
@@ -70,36 +70,26 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 	
 	public void playGame() {
 		story.displayText("The World Comes into Vision");
-		yourRoom.createButtons("Actions", false, new HashMap<String, Integer>() {{
+		yourRoom.createButtonGroup("Actions", false, new HashMap<String, Integer>() {{
 		    put ("Explore", NO_WAIT);
 		    put ("Stay Still", NO_WAIT);
 		}}, true);
-		location.createButtons("Your Room", false, new HashMap<String, Integer> () {{
+		location.createButtonGroup("Your Room", false, new HashMap<String, Integer> () {{
 			put ("A Place", NO_WAIT);
 		}}, false);
-		location.createButtons("Spaceship", false, new HashMap<String, Integer> () {{
+		location.createButtonGroup("Spaceship", false, new HashMap<String, Integer> () {{
 			put ("|    Spaceship     |", NO_WAIT);
 		}}, false);
-		location.createButtons("Dust", false, new HashMap<String, Integer> () {{
+		location.createButtonGroup("Dust", false, new HashMap<String, Integer> () {{
 			put ("Dust", NO_WAIT);
 		}}, false);
 		
-		inven.createInven("Stores", new HashMap<String, Integer>() {{
+		inven.createInvenGroup("Stores", new HashMap<String, Integer>() {{
 			put("Water", 0);
 		}});
 		
 		Nanobot test = new Nanobot("TestBot");
-		test.addNanobotListener(new NanobotListener() {
-			public void nanobotEventOccurred (HashMap<String, Integer> valuesForUpdating) {
-				Inventory stores = inven.getInventory("Stores");
-				for (String name : valuesForUpdating.keySet()) {
-					stores.updateQuantity(name, stores.getQuantity(name) + valuesForUpdating.get(name));
-				}
-			}
-			public boolean nanobotRepairOccurred() {
-				return false;
-			}
-		});
+		test.addNanobotListener(this);
 		spaceShip.add(test);
 		
 		yourRoom.addHUDEventListener(this);
@@ -110,35 +100,83 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 	}
 
 	@Override
-	public void HUDEventOccurred(HUDEvent e) {
-		String cmd = e.getBtnName();
-		   
-	   if (cmd.equals("Explore")) {
-		   story.displayText(storyText.explore());
-		   if (storyText.getExploreState() == Integer.parseInt(LAPTOP)) {
-			   yourRoom.addButtonControl("Actions", "Browse Laptop", 5, true);
-		   } else if (storyText.getExploreState() == NANOBOT) {
-			   	location.addButtonControl("Locations", "A Wrecked Room", 0, false);
-				
-		   }
-	   } else if (cmd.equals("Stay Still")) {
-		   story.displayText("You carried on sitting on the stool you sat on, no recollection of the past..."
-		   		+ "\n");
-	   } else if (cmd.equals("Browse Laptop")) {
-		   overallContainerCL.show(mainContainer, LAPTOP);
-	   } 
-	   
-	   if (cmd.equals("A Place")) {
+	public void buttonPressed(ButtonEvent be) {
+		String btnName = be.getBtnName();
+		if (btnName.equals("Explore")) {
+			   story.displayText(storyText.explore());
+			   if (storyText.getExploreState() == Integer.parseInt(LAPTOP)) {
+				   yourRoom.addButton("Actions", "Browse Laptop", 5, true);
+			   } else if (storyText.getExploreState() == NANOBOT) {
+				   	location.addButton("Locations", "A Wrecked Room", 0, false);
+			   }
+		   } else if (btnName.equals("Stay Still")) {
+			   story.displayText("You carried on sitting on the stool you sat on, no recollection of the past..."
+			   		+ "\n");
+		   } else if (btnName.equals("Browse Laptop")) {
+			   overallContainerCL.show(mainContainer, LAPTOP);
+	   }
+		
+	   if (btnName.equals("A Place")) {
 		   controllerCL.show(buttonContainer, YOUR_ROOM);
-	   } else if (cmd.equals("|    Spaceship     |")) {
+	   } else if (btnName.equals("|    Spaceship     |")) {
 		   controllerCL.show(buttonContainer, SPACESHIP);
-	   } else if (cmd.equals("Dust")) {
+	   } else if (btnName.equals("Dust")) {
 		   controllerCL.show(buttonContainer, DUST);
 	   }
 	}
 	
 	@Override
+	public boolean buttonClickable(HashMap<String, Integer> costMap) {
+		boolean repairable = true;
+		Inventory stores = inven.getInventory("Stores");
+		if (costMap != null) {
+			for (String item : costMap.keySet()) {
+				if (stores.getQuantity(item) < costMap.get(item)) {
+					repairable = false;
+					story.displayText("Not enough " + item);
+					return repairable;
+				} else {
+					stores.setQuantity(item, stores.getQuantity(item) - costMap.get(item));
+					story.displayText("Button clicked");
+				}
+			}
+		}
+		return repairable;
+	}
+	
+	@Override
 	public String receiveCommand(String command) {
 		return storyText.laptopReply(command, laptop, overallContainerCL, mainContainer);
+	}
+
+	@Override
+	public void nanobotEventOccurred(HashMap<String, Integer> valuesForUpdating) {
+		Inventory stores = inven.getInventory("Stores");
+		for (String name : valuesForUpdating.keySet()) {
+			stores.setQuantity(name, stores.getQuantity(name) + valuesForUpdating.get(name));
+		}
+	}
+
+	@Override
+	public boolean nanobotRepairOccurred(HashMap<String, Integer> costMap) {
+		boolean repairable = true;
+		Inventory stores = inven.getInventory("Stores");
+		for (String item : costMap.keySet()) {
+			if (stores.getQuantity(item) < costMap.get(item)) {
+				repairable = false;
+				story.displayText("Not enough " + item);
+				return repairable;
+			} else {
+				stores.setQuantity(item, stores.getQuantity(item) - costMap.get(item));
+				story.displayText("NanoBot upgraded");
+			}
+		}
+		return repairable;
+	}
+
+	@Override
+	public boolean plusMinusClicked(String command, String param) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

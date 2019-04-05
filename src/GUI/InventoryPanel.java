@@ -17,17 +17,17 @@ public class InventoryPanel extends JPanel implements ExpositoryConstant{
 		this.setPreferredSize(new Dimension(INVEN_WIDTH_PREFF, INVEN_HEIGHT_PREFF));
 	}
 	
-	public void createInven (String invenTitle, HashMap<String, Integer> invenItems) {
-		Inventory inven = new Inventory(invenTitle);
+	public void createInvenGroup (String invenGroupTitle, HashMap<String, Integer> invenItems) {
+		Inventory inven = new Inventory(invenGroupTitle);
 		for (String name : invenItems.keySet()) {
 			inven.addEntry(name, invenItems.get(name));
 		}
-		invenDB.put(invenTitle, inven);
+		invenDB.put(invenGroupTitle, inven);
 		this.add(inven);
 	}
 	
-	public void addInvenItem (String invenTitle, String item, int quantity) {
-		Inventory inven = invenDB.get(invenTitle);
+	public void addInvenItem (String invenGroupTitle, String item, int quantity) {
+		Inventory inven = invenDB.get(invenGroupTitle);
 		inven.addEntry(item, quantity);
 	}
 

@@ -62,6 +62,7 @@ public class PlusMinusBtn extends JPanel implements ExpositoryConstant, ButtonLi
 		this.add(controller);
 	}
 	
+	@Override
 	public void buttonPressed (ButtonEvent e) {
 		String btnName = e.getTitle();
 		Vector data = plusMinusBtnDB.get(btnName);
@@ -80,9 +81,15 @@ public class PlusMinusBtn extends JPanel implements ExpositoryConstant, ButtonLi
 			}
 		}
 	}
+	
+	@Override
+	public boolean buttonClickable(HashMap<String, Integer> costMap) {
+		return true;
+	}
 
 	public void addPlusMinusListener(PlusMinusListener plusMinusListener) {
 		this.plusMinusListener = plusMinusListener;
 	}
 
+	
 }

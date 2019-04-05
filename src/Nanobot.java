@@ -9,9 +9,9 @@ import javax.swing.event.EventListenerList;
 import ExpositoryConstant.ExpositoryConstant;
 import GUI.Button;
 import GUI.PlusMinusBtn;
-import GUI.PlusMinusListener;
 import GUI_Event_Handlers.ButtonEvent;
 import GUI_Event_Handlers.ButtonListener;
+import GUI_Event_Handlers.PlusMinusListener;
 
 public class Nanobot extends JPanel implements ExpositoryConstant {
 	private int maxFreeCapacity = 5;
@@ -68,13 +68,22 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 		upgrade = new Button("Capacity: " + currFreeCapacity + "/" + maxFreeCapacity, true);
 		upgrade.addBtn("Upgrade", NO_WAIT, true);
 		upgrade.addButtonListener(new ButtonListener () {
+			@Override
 			public void buttonPressed (ButtonEvent be) {
-				if (repairOccurred()) {
+			}
+			@Override
+			public boolean buttonClickable(HashMap<String, Integer> costMap) {
+				if (repairOccurred(costMap)) {
 					upgrade();
+					return true;
 				}
+				return false;
 			}
 		});
-		upgrade.addToolTip("Upgrade", "Cost: ");
+		upgrade.setToolTip("Upgrade", "Cost: ");
+		upgrade.setBtnCost("Upgrade", new HashMap<String, Integer> () {{
+			put("Water", 10);
+		}});
 		
 		parameters = new PlusMinusBtn("Parameters", false);
 		parameters.addPlusMinus(0, "Water", true);
@@ -120,7 +129,7 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 		upgrade.repaint();
 	}
 	
-	private void eventOccurred() {
+	public void eventOccurred() {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i += 2) {
 			if (listeners[i] == NanobotListener.class) {
@@ -129,11 +138,11 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 		}
 	}
 	
-	private boolean repairOccurred() {
+	public boolean repairOccurred(HashMap<String, Integer> costMap) {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i += 2) {
 			if (listeners[i] == NanobotListener.class) {
-				return ((NanobotListener)listeners[i + 1]).nanobotRepairOccurred();
+				return ((NanobotListener)listeners[i + 1]).nanobotRepairOccurred(costMap);
 			}
 		}
 		return false;

@@ -74,8 +74,8 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	 * @return an int, representing the quantity associated with @param name.
 	 * @throws IllegalAccessException if the @param name is not found within the inventoryDB
 	 */
-	public int getQuantity(String name) {
-		JLabel quantity = inventoryDB.get(name);
+	public int getQuantity(String item) {
+		JLabel quantity = inventoryDB.get(item);
 		try{
 			if (quantity != null) {
 				int quant = Integer.parseInt(quantity.getText());
@@ -86,7 +86,7 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 			} 
 		}
 		catch(IllegalAccessException e) {
-			System.out.println("Item " + name + " does not exist in inventory!");
+			System.out.println("Item " + item + " does not exist in inventory!");
 			return 0;
 		}
 	}
@@ -98,8 +98,8 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	 * @param newQuantity of type int, provides the newQuantity that will replace 
 	 * the current quantity value associated with @param name
 	 */
-	public void updateQuantity (String name, int newQuantity) {
-		inventoryDB.get(name).setText("" + newQuantity);
+	public void setQuantity (String item, int newQuantity) {
+		inventoryDB.get(item).setText("" + newQuantity);
 	}
 	
 	/**
@@ -108,8 +108,8 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	 * quantity is to be incremented.
 	 * @throws IllegalAccessException if @param name does not exist
 	 */
-	public void increseQuantity (String name) throws IllegalAccessException {
-		inventoryDB.get(name).setText("" + (getQuantity(name) + 1));
+	public void increseQuantity (String item) {
+		inventoryDB.get(item).setText("" + (getQuantity(item) + 1));
 	}
 
 	/**
@@ -118,8 +118,8 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	 * quantity is to be decreased.
 	 * @throws IllegalAccessException if @param name does not exist
 	 */
-	public void decreaseQuantity (String name) throws IllegalAccessException {
-		inventoryDB.get(name).setText("" + (getQuantity(name) - 1));
+	public void decreaseQuantity (String item) {
+		inventoryDB.get(item).setText("" + (getQuantity(item) - 1));
 	}
 	
 	/**
