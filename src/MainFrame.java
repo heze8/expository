@@ -84,16 +84,22 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 			put ("Dust", NO_WAIT);
 		}}, false);
 		
+		inven.createInven("Stores", new HashMap<String, Integer>() {{
+			put("Water", 0);
+		}});
 		
 		Nanobot test = new Nanobot("TestBot");
-//		test.addNanobotListener(new NanobotListener() {
-//			public void nanobotEventOccurred (HashMap<String, Integer> valuesForUpdating) {
-//				Inventory stores = inven.getInventory("Stores");
-//				for (String name : valuesForUpdating.keySet()) {
-//					stores.updateQuantity(name, stores.getQuantity(name) + valuesForUpdating.get(name));
-//				}
-//			}
-//		});
+		test.addNanobotListener(new NanobotListener() {
+			public void nanobotEventOccurred (HashMap<String, Integer> valuesForUpdating) {
+				Inventory stores = inven.getInventory("Stores");
+				for (String name : valuesForUpdating.keySet()) {
+					stores.updateQuantity(name, stores.getQuantity(name) + valuesForUpdating.get(name));
+				}
+			}
+			public boolean nanobotRepairOccurred() {
+				return false;
+			}
+		});
 		spaceShip.add(test);
 		
 		yourRoom.addHUDEventListener(this);

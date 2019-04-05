@@ -1,7 +1,10 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.*;
+import javax.swing.event.EventListenerList;
 
 import ExpositoryConstant.ExpositoryConstant;
 import GUI.Button;
@@ -19,12 +22,24 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 	private PlusMinusBtn parameters;
 	private JPanel controls;
 	private HashMap<String, Integer> params = new HashMap<String, Integer>();
-		
+	private EventListenerList listenerList = new EventListenerList();	
+	
 	public Nanobot (String name) {
 		this.setLayout(new BorderLayout());
 		this.setBackground(BG_COLOR);
 		addNameLabel(name);
 		addControls();
+		Thread t = new Thread(new Runnable () {
+			public void run() {
+				Timer timer = new Timer(CONVERT_TO_MSEC, new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						eventOccurred();
+					}
+				});
+				timer.start();
+			}
+		});
+		t.start();
 	}
 	
 	private void addNameLabel(String name) {
@@ -54,9 +69,12 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 		upgrade.addBtn("Upgrade", NO_WAIT, true);
 		upgrade.addButtonListener(new ButtonListener () {
 			public void buttonPressed (ButtonEvent be) {
-				upgrade();
+				if (repairOccurred()) {
+					upgrade();
+				}
 			}
 		});
+		upgrade.addToolTip("Upgrade", "Cost: ");
 		
 		parameters = new PlusMinusBtn("Parameters", false);
 		parameters.addPlusMinus(0, "Water", true);
@@ -100,5 +118,32 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 		currFreeCapacity += 5;
 		upgrade.setTitle("Capacity: " + currFreeCapacity + "/" + maxFreeCapacity);
 		upgrade.repaint();
+	}
+	
+	private void eventOccurred() {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i += 2) {
+			if (listeners[i] == NanobotListener.class) {
+				((NanobotListener)listeners[i + 1]).nanobotEventOccurred(params);
+			}
+		}
+	}
+	
+	private boolean repairOccurred() {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i += 2) {
+			if (listeners[i] == NanobotListener.class) {
+				return ((NanobotListener)listeners[i + 1]).nanobotRepairOccurred();
+			}
+		}
+		return false;
+	}
+	
+	public void addNanobotListener(NanobotListener nl) {
+		listenerList.add(NanobotListener.class, nl);
+	}
+	
+	public void removeNanobotListener(NanobotListener nl) {
+		listenerList.remove(NanobotListener.class, nl);
 	}
 }

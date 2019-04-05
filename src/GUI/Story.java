@@ -41,30 +41,38 @@ public class Story extends JPanel implements ExpositoryConstant {
 		if (messages.size() > MAX_MSG) {
 			messages.remove(0);
 		}		
-		int visibility = VISIBLE;
-		for (int i = messages.size() - 2; i >= 0; i --) {
-			visibility -= COLOR_FADE_INCREMENT;
-			messages.get(i).setForeground(new Color (visibility, visibility, visibility));
-			this.add(messages.get(i));
-		}
-        
-		JLabel newestMsg = messages.get(messages.size() - 1);
-        Timer timer = new Timer (TEXT_FADE_UPDATE, null);
-		timer.addActionListener(new ActionListener () {
-			int visibilty = INVINSIBLE;
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				visibilty += TEXT_FADE_DELAY;
-				if (visibilty < VISIBLE) {
-					//newestMsg.revalidate();
-					newestMsg.setForeground(new Color(visibilty, visibilty, visibilty));
-				} else {
-					timer.stop();
+		Thread reColoringOldText = new Thread (new Runnable () {
+			public void run() {
+				int visibility = VISIBLE;
+				for (int i = messages.size() - 2; i >= 0; i --) {
+					visibility -= COLOR_FADE_INCREMENT;
+					messages.get(i).setForeground(new Color (visibility, visibility, visibility));
+					add(messages.get(i));
 				}
 			}
-			
 		});
-        timer.start();
+		reColoringOldText.start();
+		Thread newTextFadeIn = new Thread (new Runnable () {
+			public void run() {
+				JLabel newestMsg = messages.get(messages.size() - 1);
+		        Timer timer = new Timer (TEXT_FADE_UPDATE, null);
+				timer.addActionListener(new ActionListener () {
+					int visibilty = INVINSIBLE;
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						visibilty += TEXT_FADE_DELAY;
+						if (visibilty < VISIBLE) {
+							//newestMsg.revalidate();
+							newestMsg.setForeground(new Color(visibilty, visibilty, visibilty));
+						} else {
+							timer.stop();
+						}
+					}
+				});
+		        timer.start();
+			}
+		});
+		newTextFadeIn.start();
 	}
 
 	

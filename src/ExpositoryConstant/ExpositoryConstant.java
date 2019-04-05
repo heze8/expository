@@ -10,6 +10,10 @@ import java.awt.Color;
  */
 
 public interface ExpositoryConstant {
+	enum test {
+		ONE, TWO, THREE;
+	}
+	
 	public static final int APPLICATION_WIDTH = 1280;
 	public static final int APPLICATION_HEIGHT = 720;
 	
@@ -29,19 +33,26 @@ public interface ExpositoryConstant {
 	/* Constants for PlayerHUD overall margin */
 	public static final int PLAYER_HUD_MARGIN = 10;
 	
-	////////////////////////////////////
-	// PlusMinus and Button CONSTANTS //
-	////////////////////////////////////
+	/////////////////////////
+	// PlusMinus CONSTANTS //
+	/////////////////////////
 	/* Constants for the JLabel extraction in PlusMinus class when incrementing/decreasing it*/
 	public static final int JLABEL = 2;
-	
-	/* Constant for JLabel extraction in Button class when changing name */
-	public static final int JLABEL_TO_CHANGE = 0;
-	public static final int COOLDOWN = 1;
 	
 	/* Constant for plusMinusBtn class for event firing */
 	public static final String DECREASE = "Decrease";
 	public static final String INCREASE = "Increase";
+	
+		
+	//////////////////////
+	// Button CONSTANTS //
+	//////////////////////
+	/* Constant for JLabel extraction in Button class when changing name */
+	public static enum btnData {
+		JLABEL,
+		COOLDOWN,
+		COST;
+	}
 	
 	/* Constant for PlayerHUD control colors */
 	public static final Color CLICKED_COLOR = Color.RED;
@@ -54,7 +65,7 @@ public interface ExpositoryConstant {
 	/* Constant for conversion of cooldown value from seconds to milliseconds for button controls */
 	public static final int CONVERT_TO_MSEC = 1000;
 	
-	/* Constant for buttons ot have no cooldown time */
+	/* Constant for buttons to have no cooldown time */
 	public static final int NO_WAIT = 0;
 	
 	/////////////////////////

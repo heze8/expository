@@ -16,8 +16,10 @@ import GUI_Event_Handlers.ButtonListener;
 public class Button extends JPanel implements MouseListener, ExpositoryConstant {
 	private HashMap<String, Vector> btnDB = new HashMap<String, Vector>();
 	private EventListenerList listenerList = new EventListenerList();
+	
 	private TitledBorder titleBorder;
 	private String title;
+	private boolean isClickable;
 	
 	/**
 	 * Constructor for the Button Control class, creates a title for the set of controls if needed.
@@ -66,6 +68,7 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
        Vector data = new Vector();
        data.add(newBtn);
        data.add(cooldown);
+       data.add(null);
        btnDB.put(name, data);
 	}
 	
@@ -79,16 +82,25 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 	
 	public void changeBtnName(String oldName, String newName) {
 		Vector data = btnDB.get(oldName);
-		JLabel labelToChange = (JLabel) data.get(JLABEL_TO_CHANGE);
+		JLabel labelToChange = (JLabel) data.get(btnData.JLABEL.ordinal());
 		labelToChange.setText(newName);
 		btnDB.remove(oldName);
 		btnDB.put(newName, data);
 	}
 	
-	public void addToolTip (String name) {
-		Vector data = btnDB.get(name);
-		JLabel labelToAddTooltip = (JLabel) data.get(JLABEL_TO_CHANGE);
-		labelToAddTooltip.setToolTipText(TOOL_TIP_TEXT_KEY);
+	public void addToolTip (String btnNameToAddTooltip, String tip) {
+		Vector data = btnDB.get(btnNameToAddTooltip);
+		JLabel labelToAddTooltip = (JLabel) data.get(btnData.JLABEL.ordinal());
+		labelToAddTooltip.setToolTipText(tip);
+	}
+	
+	public boolean isClickable() {
+		return isClickable;
+	}
+	
+	public void setCost(String btnName, HashMap<String, Integer> costMap) {
+		Vector data = btnDB.get(btnName);
+		data.set(btnData.COST.ordinal(), costMap);
 	}
 	
 	
@@ -143,7 +155,8 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 	public void mousePressed(MouseEvent arg0) {
 		JLabel pressed = (JLabel)arg0.getSource();		
 		String pressedBtnLabel = pressed.getText();
-		int cooldown = (int) btnDB.get(pressedBtnLabel).get(COOLDOWN);
+		int cooldown = (int) btnDB.get(pressedBtnLabel).get(btnData.COOLDOWN.ordinal());
+		
 		if (pressed.getForeground() != CLICKED_COLOR) {
 			fireButtonEvent(new ButtonEvent (pressed, pressed.getText(), getTitle()));
 			// Changes button color to show that button is not clickable
