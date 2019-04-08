@@ -8,22 +8,33 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventListener, ConsoleListener, NanobotListener{
+	
+	/* Instance variables for the various components needed to build the GUI*/
 	private CardLayout overallContainerCL = new CardLayout();
 	private CardLayout controllerCL = new CardLayout();
+	private CardLayout dustCL = new CardLayout();
 	private JPanel mainContainer;
 	private JPanel centerContainer;
 	private JPanel buttonContainer;
+	private JPanel dustContainer;
 	private JPanel mainGUI;
 	
 	private Story story;
 	private StoryText storyText = new StoryText();
+	
+	private PlayerHUD location;
 	private PlayerHUD yourRoom;
 	private PlayerHUD spaceShip;
 	private PlayerHUD dust;
-	private PlayerHUD location;
+	private AdventureMap map;
+	
 	private InventoryPanel inven;
 	private LatopText laptop = new LatopText();
 	
+	/**
+	 * Constructor which initializes the overall JFrame of the application
+	 * @param title of type String, provides the name for the application window.
+	 */
 	public MainFrame(String title) {
 		this.setTitle(title);	
 		this.setSize(APPLICATION_WIDTH, APPLICATION_HEIGHT);
@@ -32,6 +43,10 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
         loadGUI();
 	}
 	
+	/**
+	 * Loads all the GUI components into their proper position.
+	 * Adds listener to the components as well.
+	 */
 	private void loadGUI() {
 		
 		//Creating the JPanels that will store the various components
@@ -39,13 +54,15 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 		mainGUI = new JPanel(new BorderLayout());
 		centerContainer = new JPanel(new BorderLayout());
 		buttonContainer = new JPanel(controllerCL);
+		dustContainer = new JPanel(dustCL);
 		
 		//Create swing components to be added to the JPanels
 		yourRoom = new PlayerHUD();
 		spaceShip = new PlayerHUD();
 		dust = new PlayerHUD();
-		
-		location = new PlayerHUD();
+		map = new AdventureMap();
+		location = new PlayerHUD();		
+
 		story = new Story();
 		inven = new InventoryPanel();
 		
@@ -53,36 +70,37 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 		mainGUI.add(story, BorderLayout.LINE_START);
 		mainGUI.add(inven, BorderLayout.LINE_END);
 		
+		// Adding swing components to the center panel.
 		centerContainer.add(location, BorderLayout.PAGE_START);
 		centerContainer.add(buttonContainer, BorderLayout.CENTER);
 		buttonContainer.add(yourRoom, YOUR_ROOM);
 		buttonContainer.add(spaceShip, SPACESHIP);
-		buttonContainer.add(dust, DUST);
+		buttonContainer.add(dustContainer, DUST);
+		dustContainer.add(dust, DUST);
+		dustContainer.add(map, MAP);
+
+		//Adding the parent center, @name centerContainer, JPanels to the mainGUI
 		mainGUI.add(centerContainer, BorderLayout.CENTER);
 		
-		//Adding mainGUI JPanel and Laptop class to mainContainer, the overall parent.
+		//Adding mainGUI JPanel and Laptop class to mainContainer, the overall parent container.
 		mainContainer.add(mainGUI, MAIN_GUI);
 		mainContainer.add(laptop, LAPTOP);
-		laptop.bootLaptop();
 		
 		this.add(mainContainer);
+		
+		//Adding Listeners to the various components
+		yourRoom.addHUDEventListener(this);
+		spaceShip.addHUDEventListener(this);
+		dust.addHUDEventListener(this);
+		location.addHUDEventListener(this);
+		laptop.addConsoleListener(this);	
 	}
+	
 	
 	public void playGame() {
 		story.displayText("The World Comes into Vision");
-		yourRoom.createButtonGroup("Actions", false, new HashMap<String, Integer>() {{
-		    put ("Explore", NO_WAIT);
-		    put ("Stay Still", NO_WAIT);
-		}}, true);
-		location.createButtonGroup("Your Room", false, new HashMap<String, Integer> () {{
-			put ("A Place", NO_WAIT);
-		}}, false);
-		location.createButtonGroup("Spaceship", false, new HashMap<String, Integer> () {{
-			put ("|    Spaceship     |", NO_WAIT);
-		}}, false);
-		location.createButtonGroup("Dust", false, new HashMap<String, Integer> () {{
-			put ("Dust", NO_WAIT);
-		}}, false);
+		initRoomControls();
+		initLocationControls();
 		
 		inven.createInvenGroup("Stores", new HashMap<String, Integer>() {{
 			put("Water", 0);
@@ -92,11 +110,26 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 		test.addNanobotListener(this);
 		spaceShip.add(test);
 		
-		yourRoom.addHUDEventListener(this);
-		spaceShip.addHUDEventListener(this);
-		dust.addHUDEventListener(this);
-		location.addHUDEventListener(this);
-		laptop.addConsoleListener(this);		
+			
+	}
+
+	private void initRoomControls() {
+		yourRoom.createButtonGroup("Actions", false, new HashMap<String, Integer>() {{
+		    put ("Explore", 1);
+		    put ("Stay Still", 0);
+		}}, true);
+	}
+
+	private void initLocationControls() {
+		location.createButtonGroup("Your Room", false, new HashMap<String, Integer> () {{
+			put ("A Place", NO_WAIT);
+		}}, false);
+		location.createButtonGroup("Spaceship", false, new HashMap<String, Integer> () {{
+			put ("|    Spaceship     |", NO_WAIT);
+		}}, false);
+		location.createButtonGroup("Dust", false, new HashMap<String, Integer> () {{
+			put ("Dust", NO_WAIT);
+		}}, false);
 	}
 
 	@Override
@@ -114,6 +147,7 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 			   		+ "\n");
 		   } else if (btnName.equals("Browse Laptop")) {
 			   overallContainerCL.show(mainContainer, LAPTOP);
+			   laptop.bootLaptop();
 	   }
 		
 	   if (btnName.equals("A Place")) {
@@ -123,6 +157,8 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 	   } else if (btnName.equals("Dust")) {
 		   controllerCL.show(buttonContainer, DUST);
 	   }
+	   
+	   
 	}
 	
 	@Override

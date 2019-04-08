@@ -40,19 +40,17 @@ public class Story extends JPanel implements ExpositoryConstant {
 	private void fadeInText(ArrayList<JLabel> messages) {
 		if (messages.size() > MAX_MSG) {
 			messages.remove(0);
-		}		
-		Thread reColoringOldText = new Thread (new Runnable () {
-			public void run() {
-				int visibility = VISIBLE;
-				for (int i = messages.size() - 2; i >= 0; i --) {
-					visibility -= COLOR_FADE_INCREMENT;
-					messages.get(i).setForeground(new Color (visibility, visibility, visibility));
-					add(messages.get(i));
-					repaint();
-				}
+		}
+		
+		final SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+
+			@Override
+			protected String doInBackground() throws Exception {
+				// TODO Auto-generated method stub
+				return null;
 			}
-		});
-		reColoringOldText.start();
+			
+		};
 		Thread newTextFadeIn = new Thread (new Runnable () {
 			public void run() {
 				JLabel newestMsg = messages.get(messages.size() - 1);
@@ -63,8 +61,8 @@ public class Story extends JPanel implements ExpositoryConstant {
 					public void actionPerformed(ActionEvent arg0) {
 						visibilty += TEXT_FADE_DELAY;
 						if (visibilty < VISIBLE) {
-							//newestMsg.revalidate();
 							newestMsg.setForeground(new Color(visibilty, visibilty, visibilty));
+							repaint();
 						} else {
 							timer.stop();
 						}
@@ -73,7 +71,19 @@ public class Story extends JPanel implements ExpositoryConstant {
 		        timer.start();
 			}
 		});
-		newTextFadeIn.start();
+		Thread reColoringOldText = new Thread (new Runnable () {
+			public void run() {
+				int visibility = VISIBLE;
+				for (int i = messages.size() - 2; i >= 0; i --) {
+					visibility -= COLOR_FADE_INCREMENT;
+					messages.get(i).setForeground(new Color (visibility, visibility, visibility));
+					add(messages.get(i));
+				}
+				repaint();
+				newTextFadeIn.start();
+			}
+		});
+		reColoringOldText.start();
 	}
 
 	

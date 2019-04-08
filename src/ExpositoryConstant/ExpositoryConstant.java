@@ -10,9 +10,6 @@ import java.awt.Color;
  */
 
 public interface ExpositoryConstant {
-	enum test {
-		ONE, TWO, THREE;
-	}
 	
 	public static final int APPLICATION_WIDTH = 1280;
 	public static final int APPLICATION_HEIGHT = 720;
@@ -26,9 +23,14 @@ public interface ExpositoryConstant {
 	/////////////////////////
 	/* Constant for various display position in cardLayout display */
 	public static final String MAIN_GUI = "1";
+	public static final String LAPTOP = "2";
+	
 	public static final String YOUR_ROOM = "1";
 	public static final String SPACESHIP = "2";
-	public static final String DUST = "3";
+	public static final String DUST_CONTAINER = "3";
+	
+	public static final String DUST = "4";
+	public static final String MAP = "5";
 	
 	/* Constants for PlayerHUD overall margin */
 	public static final int PLAYER_HUD_MARGIN = 10;
@@ -54,6 +56,13 @@ public interface ExpositoryConstant {
 		COST;
 	}
 	
+	public static enum pressedBtnData {
+		X_POS,
+		Y_POS,
+		WIDTH,
+		HEIGHT;
+	}
+	
 	/* Constant for PlayerHUD control colors */
 	public static final Color CLICKED_COLOR = Color.RED;
 	public static final Color HOVER_COLOR = Color.LIGHT_GRAY;
@@ -63,7 +72,10 @@ public interface ExpositoryConstant {
 	public static final int CONTROL_LABEL_LENGTH= 100;
 	
 	/* Constant for conversion of cooldown value from seconds to milliseconds for button controls */
-	public static final int CONVERT_TO_MSEC = 1000;
+	public static final int SEC_TO_MSEC = 1000;
+	
+	/* Constant for update interval for button cooldown control animation */
+	public static final int UPDATE_TIME = 50;
 	
 	/* Constant for buttons to have no cooldown time */
 	public static final int NO_WAIT = 0;
@@ -112,8 +124,6 @@ public interface ExpositoryConstant {
 	//////////////////////
 	// Laptop CONSTANTS //
 	//////////////////////
-	/* Constant for laptop position in cardLayout display */
-	public static final String LAPTOP = "2";
 	
 	/* Constant for the password hashCode */
 	public static final float PASSWORD = 1417332055813389L;

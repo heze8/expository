@@ -31,7 +31,7 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 		addControls();
 		Thread t = new Thread(new Runnable () {
 			public void run() {
-				Timer timer = new Timer(CONVERT_TO_MSEC, new ActionListener() {
+				Timer timer = new Timer(SEC_TO_MSEC, new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						eventOccurred();
 					}
