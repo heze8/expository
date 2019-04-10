@@ -13,12 +13,14 @@ import ExpositoryConstant.ExpositoryConstant;
 public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 	private String MOVED = "MOVED";
 	private FloorMaps currentFloor;
+	private Player player;
 	
 	public AdventureMapBoard() {
 		setKeyBindings();
 		
 		//Initialization 
 		currentFloor = new FloorMaps();
+		player = new Player(30, 30);
 	}
 
 	@Override
@@ -68,12 +70,16 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 			System.out.println("Command: " + e.getActionCommand() + "\nsource: " + e.getSource());
 			if (e.getActionCommand().equals("w")) {
 				System.out.println("Up pressed!");
+				
 			} else if (e.getActionCommand().equals("s")) {
 				System.out.println("Down ppressed!");
+				
 			} else if (e.getActionCommand().equals("a")) {
 				System.out.println("LEFT PRESSED!");
+			
 			} else if (e.getActionCommand().equals("d")) {
 				System.out.println("RIGHT PRESSED!");
+			
 			} 
 		}
 		
