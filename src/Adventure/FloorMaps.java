@@ -3,17 +3,19 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import ExpositoryConstant.ExpositoryConstant;
+import ExpositoryConstant.ExpositoryConstant.Direction;
+
 import java.awt.Color;
 
 public class FloorMaps implements ExpositoryConstant {
 	
 	private Vector [][] tiles;
-	private int seed = ThreadLocalRandom.current().nextInt(0, 10);
+	//private int seed = ThreadLocalRandom.current().nextInt(0, 10);
 	private SimplexValueNoise noise;
+	private String currentTerrain = "";
 	
 	public FloorMaps () {
 		System.out.println("Floor Maps being created");
-		
 		tiles = generateFloorMap();
 	}
 	
@@ -41,7 +43,7 @@ public class FloorMaps implements ExpositoryConstant {
 	 */
 	private double[][] generateSimplexMap() {
 		System.out.println("Generating simplexMap...");
-		noise = new SimplexValueNoise(seed);
+		noise = new SimplexValueNoise(SEED_VALUE);
 		double [][] simplexMap = new double[WORLD_HEIGHT][WORLD_WIDTH];
 		for (int i = 0; i < WORLD_HEIGHT; i ++) {
 			for (int j = 0; j < WORLD_WIDTH; j++) {
@@ -142,6 +144,7 @@ public class FloorMaps implements ExpositoryConstant {
 			}
 		}
 		
+//		test print of terrain to console
 //		String toPrint = ""; 
 //		for (int i = 0; i < WORLD_HEIGHT; i ++) {
 //			toPrint = "";
@@ -153,6 +156,14 @@ public class FloorMaps implements ExpositoryConstant {
 		return terrainMap;
 	}
 
+	/**
+	 * Gets the type of terrain that is to be placed at a particular location
+	 * @param waterLevel of type double, provides the value for which the water height is to be set at
+	 * @param height of type double, provides the value that is used to compare and determine what tile to use
+	 * @return a Vector containing the character that is to be placed given @param height and the color it is 
+	 * supposed to be in.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Vector getTypeByElevation(double waterLevel, double height) {
 		int elevation = (int) (height * 255);
 		int waterLine = (int) (waterLevel * 255);
@@ -163,7 +174,7 @@ public class FloorMaps implements ExpositoryConstant {
 			//Shallow water
 			if (elevation > waterLine - 20) {
 				toReturn.add(",");
-				toReturn.add(Color.blue);
+				toReturn.add(Color.BLUE);
 			} 
 			// Deep water
 			else {
@@ -238,5 +249,72 @@ public class FloorMaps implements ExpositoryConstant {
 	 */
 	public Color getColor (int x, int y) {
 		return (Color) tiles[y][x].get(terrain.COLOR.ordinal());
+	}
+	
+	
+	/**
+	 * Checks if the player can move in a specified direction
+	 * @param dir of the enum type Direction in ExpositoryConstant, 
+	 * provides the direction that the player wants to move in
+	 * @return true if the player can move in that direction
+	 * false otherwise
+	 */
+	public boolean playerCanMove (Direction dir) {
+		switch (dir) {
+		case UP:
+			return player.getY() - 1 >= 0 && getTile(player.getX(), player.getY() - 1) != ",";
+		case DOWN:
+			return player.getY() + 1 < WORLD_HEIGHT - 1 && getTile(player.getX(), player.getY() + 1) != ","; 
+		case LEFT:
+			return player.getX() - 1 >= 0 && getTile(player.getX() - 1, player.getY()) != ","; 
+		case RIGHT:
+			return player.getX() + 1 < WORLD_WIDTH && getTile(player.getX() + 1, player.getY()) != ",";
+		}
+		return false;
+	}
+	
+	/**
+	 * Updates the player location to a new location and changes its past move back to terrain
+	 * @param x of type int, provides the new x coordinate of the player
+	 * @param y of type int, provides the new y coordinate of the player
+	 */
+	@SuppressWarnings("unchecked")
+	public void updatePlayerLocOnMap(int x, int y) {
+		String prevTerrain = currentTerrain;
+		currentTerrain = (String) tiles[y][x].get(terrain.TILE.ordinal());
+		tiles[y][x].set(terrain.TILE.ordinal(), "@");
+		
+		switch (player.getMostRecentMove()) {
+		case UP: 
+			tiles[y + 1][x].set(terrain.TILE.ordinal(), prevTerrain); break;
+		case DOWN: 
+			tiles[y - 1][x].set(terrain.TILE.ordinal(), prevTerrain); break;
+		case LEFT: 
+			tiles[y][x + 1].set(terrain.TILE.ordinal(), prevTerrain); break;
+		case RIGHT: 
+			tiles[y][x - 1].set(terrain.TILE.ordinal(), prevTerrain); break;
+		}	
+	}
+	
+	/**
+	 * sets the player location to a new location and changes its location back to terrain
+	 * @param x of type int, provides the new x coordinate of the player
+	 * @param y of type int, provides the new y coordinate of the player
+	 */
+	@SuppressWarnings("unchecked")
+	public void setPlayerLocOnMap(int x, int y) {
+		currentTerrain = (String) tiles[y][x].get(terrain.TILE.ordinal());
+		tiles[y][x].set(terrain.TILE.ordinal(), "@");
+	}
+
+	/**
+	 * Moves the tile in said direction
+	 * @param dir of type enum Direction from ExpositoryConstant, provides the direction 
+	 * to move the tile in.
+	 */
+	public void moveTile(Direction dir) {
+		player.setMostRecentMove(dir);
+		player.move(dir);
+		currentFloor.updatePlayerLocOnMap(player.getX(), player.getY());
 	}
 }

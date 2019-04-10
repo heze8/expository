@@ -12,20 +12,18 @@ import ExpositoryConstant.ExpositoryConstant;
 
 public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 	private String MOVED = "MOVED";
-	private FloorMaps currentFloor;
-	private Player player;
+	
 	
 	public AdventureMapBoard() {
 		setKeyBindings();
-		
-		//Initialization 
-		currentFloor = new FloorMaps();
-		player = new Player(30, 30);
+		currentFloor.setPlayerLocOnMap(player.getX(), player.getY());
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		repaint();
+		revalidate();
 		
 		//background
 		g.setColor(BG_COLOR);
@@ -40,7 +38,7 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 				g.drawString("" + currentFloor.getTile(j, i)
 						, x
 						, y);
-				x += 10;
+				x += 15;
 			}
 			y += 15; x = 20;
 		}
@@ -67,21 +65,38 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Command: " + e.getActionCommand() + "\nsource: " + e.getSource());
-			if (e.getActionCommand().equals("w")) {
-				System.out.println("Up pressed!");
-				
-			} else if (e.getActionCommand().equals("s")) {
-				System.out.println("Down ppressed!");
-				
-			} else if (e.getActionCommand().equals("a")) {
-				System.out.println("LEFT PRESSED!");
+			//System.out.println("Command: " + e.getActionCommand() + "\nsource: " + e.getSource());
 			
-			} else if (e.getActionCommand().equals("d")) {
-				System.out.println("RIGHT PRESSED!");
+			switch(e.getActionCommand()) {
+			// Move player up
+			case "w":
+				if (currentFloor.playerCanMove(Direction.UP)) {
+					currentFloor.moveTile(Direction.UP);
+				}
+				break;
+				
+			// Move player down
+			case "s":
+				if (currentFloor.playerCanMove(Direction.DOWN)) {
+					currentFloor.moveTile(Direction.DOWN);
+				}
+				break;			
 			
-			} 
-		}
-		
+			// Move player left	
+			case "a":
+				if (currentFloor.playerCanMove(Direction.LEFT)) {
+					currentFloor.moveTile(Direction.LEFT);
+				}
+				break;
+				
+			// Move player right
+			case "d":
+				if (currentFloor.playerCanMove(Direction.RIGHT)) {
+					currentFloor.moveTile(Direction.RIGHT);
+				}
+				break;
+			}
+		}	
 	}
+	
 }

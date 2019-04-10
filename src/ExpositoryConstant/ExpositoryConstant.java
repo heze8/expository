@@ -3,6 +3,9 @@ package ExpositoryConstant;
 
 import java.awt.Color;
 
+import Adventure.FloorMaps;
+import Adventure.Player;
+
 /*
  * FileName: ExpositoryConstant.java
  * --------------------------------
@@ -11,7 +14,10 @@ import java.awt.Color;
 
 public interface ExpositoryConstant {
 	
-	public static final int APPLICATION_WIDTH = 1280;
+	public FloorMaps currentFloor = new FloorMaps();
+	public Player player = new Player (13, 10);
+	
+	public static final int APPLICATION_WIDTH = 1600;
 	public static final int APPLICATION_HEIGHT = 720;
 	
 	/* Constants for the color scheme of text in the game */
@@ -157,7 +163,7 @@ public interface ExpositoryConstant {
 	/////////////////////////
 	/* Constants for the world map size */
 	public static final int WORLD_HEIGHT = 40;
-	public static final int WORLD_WIDTH = 100;
+	public static final int WORLD_WIDTH = 60;
 	public static final long SEED_VALUE = 0;
 	
 	
@@ -167,5 +173,15 @@ public interface ExpositoryConstant {
 	public static enum terrain {
 		TILE,
 		COLOR;
+	}
+		
+	/////////////////////////
+	// Player CONSTANTS //
+	/////////////////////////
+	public enum Direction {
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT;
 	}
 }

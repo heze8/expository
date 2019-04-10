@@ -1,8 +1,11 @@
 package Adventure;
 
+import ExpositoryConstant.ExpositoryConstant.Direction;
+
 public class Player {
 	private int posX;
-	private int posY;
+	private int posY;	
+	private Direction mostRecentMove = null;
 	
 	/**
 	 * Constructor, creates a player object
@@ -41,12 +44,25 @@ public class Player {
 		case LEFT: posX--; break;
 		case RIGHT: posX++; break;
 		}
+		
+		System.out.println("Player is now at " + posX + ", " + posY);
 	}
 	
-	private enum Direction {
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT;
+	/**
+	 * Sets the most recent move of the player
+	 * @param dir of enum Direction in ExpositoryConstant, provides the most 
+	 * recent direction the player moved in.
+	 */
+	public void setMostRecentMove(Direction dir) {
+		mostRecentMove = dir;
 	}
+
+	/**
+	 * Returns the most recent move of the player
+	 * @return the most recent move made by the player
+	 */
+	public Direction getMostRecentMove() {
+		return mostRecentMove;
+	}
+	
 }
