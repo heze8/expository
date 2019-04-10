@@ -1,5 +1,6 @@
 import javax.swing.*;
 
+import Adventure.AdventureMapBoard;
 import ExpositoryConstant.ExpositoryConstant;
 import GUI.*;
 import GUI_Event_Handlers.*;
@@ -26,7 +27,7 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 	private PlayerHUD yourRoom;
 	private PlayerHUD spaceShip;
 	private PlayerHUD dust;
-	private AdventureMap map;
+	private AdventureMapBoard mapBoard;
 	
 	private InventoryPanel inven;
 	private LatopText laptop = new LatopText();
@@ -60,7 +61,7 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 		yourRoom = new PlayerHUD();
 		spaceShip = new PlayerHUD();
 		dust = new PlayerHUD();
-		map = new AdventureMap();
+		mapBoard = new AdventureMapBoard();
 		location = new PlayerHUD();		
 
 		story = new Story();
@@ -76,8 +77,8 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 		buttonContainer.add(yourRoom, YOUR_ROOM);
 		buttonContainer.add(spaceShip, SPACESHIP);
 		buttonContainer.add(dustContainer, DUST);
+		dustContainer.add(mapBoard, MAP);
 		dustContainer.add(dust, DUST);
-		dustContainer.add(map, MAP);
 
 		//Adding the parent center, @name centerContainer, JPanels to the mainGUI
 		mainGUI.add(centerContainer, BorderLayout.CENTER);
@@ -101,7 +102,9 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 		story.displayText("The World Comes into Vision");
 		initRoomControls();
 		initLocationControls();
-		
+//		dust.addButtonGroup("TEST", true);
+//		dust.addButton("TEST", "HOME", 0, true);
+//		
 		inven.createInvenGroup("Stores", new HashMap<String, Integer>() {{
 			put("Water", 0);
 		}});
@@ -114,20 +117,20 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 	}
 
 	private void initRoomControls() {
-		yourRoom.createButtonGroup("Actions", false, new HashMap<String, Integer>() {{
+		yourRoom.addButtonGroup("Actions", false, new HashMap<String, Integer>() {{
 		    put ("Explore", 1);
 		    put ("Stay Still", 0);
 		}}, true);
 	}
 
 	private void initLocationControls() {
-		location.createButtonGroup("Your Room", false, new HashMap<String, Integer> () {{
+		location.addButtonGroup("Your Room", false, new HashMap<String, Integer> () {{
 			put ("A Place", NO_WAIT);
 		}}, false);
-		location.createButtonGroup("Spaceship", false, new HashMap<String, Integer> () {{
+		location.addButtonGroup("Spaceship", false, new HashMap<String, Integer> () {{
 			put ("|    Spaceship     |", NO_WAIT);
 		}}, false);
-		location.createButtonGroup("Dust", false, new HashMap<String, Integer> () {{
+		location.addButtonGroup("Dust", false, new HashMap<String, Integer> () {{
 			put ("Dust", NO_WAIT);
 		}}, false);
 	}

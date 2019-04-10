@@ -38,7 +38,7 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 	 * @param buttonsToAdd of type HashMap, contains the buttons to be added, 
 	 * with each button name of type String mapped to its cooldown time (of type int) in seconds.
 	 */
-	public void createButtonGroup (String groupTitle, boolean displayTitle, HashMap<String, Integer> buttonsToAdd, boolean displayBorder) {
+	public void addButtonGroup (String groupTitle, boolean displayTitle, HashMap<String, Integer> buttonsToAdd, boolean displayBorder) {
 		Button buttonGroup = new Button (groupTitle, displayTitle);
 		
 		for (String name : buttonsToAdd.keySet()) {
@@ -64,10 +64,8 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 	 * Puts a set of control up onto the JPanel for users to interact with
 	 * @param btnGroupTitle of type String, provides the title for the particular set of controls
 	 * @param displayTitle of type boolean, if true, the title of the controls will be shown
-	 * @param buttonsToAdd of type HashMap, contains the buttons to be added, 
-	 * with each button name of type String mapped to its cooldown time (of type int) in seconds.
 	 */
-	public void createButtonGroup(String btnGroupTitle, boolean displayTitle) {
+	public void addButtonGroup(String btnGroupTitle, boolean displayTitle) {
 		Button buttonGroup = new Button (btnGroupTitle, displayTitle);
 		
 		buttonGroup.addButtonListener(new ButtonListener() {

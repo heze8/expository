@@ -19,6 +19,7 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 
 import ExpositoryConstant.ExpositoryConstant;
+import GUI_Event_Handlers.ConsoleListener;
 
 
 public class LatopText extends JScrollPane implements ExpositoryConstant {

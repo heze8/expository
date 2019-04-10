@@ -150,4 +150,22 @@ public interface ExpositoryConstant {
 	
 	/* Constants for NanoBot find */
 	public static final int NANOBOT = 7;
+	
+		
+	/////////////////////////
+	// FloorMaps CONSTANTS //
+	/////////////////////////
+	/* Constants for the world map size */
+	public static final int WORLD_HEIGHT = 40;
+	public static final int WORLD_WIDTH = 100;
+	public static final long SEED_VALUE = 0;
+	
+	
+	/* Constant for the colours of the various terrains in the world */
+	
+	/* Constants for the color and character representing the terrain */
+	public static enum terrain {
+		TILE,
+		COLOR;
+	}
 }

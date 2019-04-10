@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.Timer;
 
 import ExpositoryConstant.ExpositoryConstant;
+import GUI_Event_Handlers.ConsoleListener;
 
 public class Laptop extends JPanel implements ExpositoryConstant {
 	

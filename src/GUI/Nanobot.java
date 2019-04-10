@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,10 +8,9 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 
 import ExpositoryConstant.ExpositoryConstant;
-import GUI.Button;
-import GUI.PlusMinusBtn;
 import GUI_Event_Handlers.ButtonEvent;
 import GUI_Event_Handlers.ButtonListener;
+import GUI_Event_Handlers.NanobotListener;
 import GUI_Event_Handlers.PlusMinusListener;
 
 public class Nanobot extends JPanel implements ExpositoryConstant {
