@@ -1,10 +1,6 @@
 package ExpositoryConstant;
 
-
 import java.awt.Color;
-
-import Adventure.FloorMaps;
-import Adventure.Player;
 
 /*
  * FileName: ExpositoryConstant.java
@@ -13,9 +9,6 @@ import Adventure.Player;
  */
 
 public interface ExpositoryConstant {
-	
-	public FloorMaps currentFloor = new FloorMaps();
-	public Player player = new Player (13, 10);
 	
 	public static final int APPLICATION_WIDTH = 1600;
 	public static final int APPLICATION_HEIGHT = 720;
@@ -37,6 +30,14 @@ public interface ExpositoryConstant {
 	
 	public static final String DUST = "4";
 	public static final String MAP = "5";
+	
+	/* Enum for locaiton of user within the game HUD */
+	public enum Location {
+		ROOM,
+		LAPTOP,
+		SPACESHIP,
+		DUST;
+	}
 	
 	/* Constants for PlayerHUD overall margin */
 	public static final int PLAYER_HUD_MARGIN = 10;
@@ -67,6 +68,11 @@ public interface ExpositoryConstant {
 		Y_POS,
 		WIDTH,
 		HEIGHT;
+	}
+	
+	public static enum ExploreBtnEvent {
+		NOTHING,
+		FIND_NANOBOT;
 	}
 	
 	/* Constant for PlayerHUD control colors */
@@ -149,14 +155,6 @@ public interface ExpositoryConstant {
 	
 	/* Constant for laptop elipses print number */
 	public static final int NUMBER_OF_DOTS= 3;
-	
-	/////////////////////////
-	// StoryText CONSTANTS //
-	/////////////////////////
-	
-	/* Constants for NanoBot find */
-	public static final int NANOBOT = 7;
-	
 		
 	/////////////////////////
 	// FloorMaps CONSTANTS //
@@ -175,13 +173,15 @@ public interface ExpositoryConstant {
 		COLOR;
 	}
 		
-	/////////////////////////
+	//////////////////////
 	// Player CONSTANTS //
-	/////////////////////////
+	//////////////////////
 	public enum Direction {
 		UP,
 		DOWN,
 		LEFT,
 		RIGHT;
 	}
+	
+	
 }

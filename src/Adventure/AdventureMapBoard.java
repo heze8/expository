@@ -8,7 +8,7 @@ import java.util.*;
 
 import javax.swing.*;
 
-import ExpositoryConstant.ExpositoryConstant;
+import ExpositoryConstant.*;
 
 public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 	private String MOVED = "MOVED";
@@ -16,7 +16,7 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 	
 	public AdventureMapBoard() {
 		setKeyBindings();
-		currentFloor.setPlayerLocOnMap(player.getX(), player.getY());
+		Resources.currentFloor.setPlayerLocOnMap(Resources.player.getX(), Resources.player.getY());
 	}
 
 	@Override
@@ -32,10 +32,10 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 		//FloorMap
 		g.setFont(new Font(STORY_FONT, Font.BOLD, 15));
 		int x = 20, y = 20;
-		for (int i = 0; i < currentFloor.getHeight(); i ++) {
-			for (int j = 0; j < currentFloor.getWidth(); j++) {
-				g.setColor((Color) currentFloor.getColor(j, i));
-				g.drawString("" + currentFloor.getTile(j, i)
+		for (int i = 0; i < Resources.currentFloor.getHeight(); i ++) {
+			for (int j = 0; j < Resources.currentFloor.getWidth(); j++) {
+				g.setColor((Color) Resources.currentFloor.getColor(j, i));
+				g.drawString("" + Resources.currentFloor.getTile(j, i)
 						, x
 						, y);
 				x += 15;
@@ -70,29 +70,29 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 			switch(e.getActionCommand()) {
 			// Move player up
 			case "w":
-				if (currentFloor.playerCanMove(Direction.UP)) {
-					currentFloor.moveTile(Direction.UP);
+				if (Resources.currentFloor.playerCanMove(Direction.UP)) {
+					Resources.currentFloor.moveTile(Direction.UP);
 				}
 				break;
 				
 			// Move player down
 			case "s":
-				if (currentFloor.playerCanMove(Direction.DOWN)) {
-					currentFloor.moveTile(Direction.DOWN);
+				if (Resources.currentFloor.playerCanMove(Direction.DOWN)) {
+					Resources.currentFloor.moveTile(Direction.DOWN);
 				}
 				break;			
 			
 			// Move player left	
 			case "a":
-				if (currentFloor.playerCanMove(Direction.LEFT)) {
-					currentFloor.moveTile(Direction.LEFT);
+				if (Resources.currentFloor.playerCanMove(Direction.LEFT)) {
+					Resources.currentFloor.moveTile(Direction.LEFT);
 				}
 				break;
 				
 			// Move player right
 			case "d":
-				if (currentFloor.playerCanMove(Direction.RIGHT)) {
-					currentFloor.moveTile(Direction.RIGHT);
+				if (Resources.currentFloor.playerCanMove(Direction.RIGHT)) {
+					Resources.currentFloor.moveTile(Direction.RIGHT);
 				}
 				break;
 			}

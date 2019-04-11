@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import ExpositoryConstant.ExpositoryConstant;
 import ExpositoryConstant.ExpositoryConstant.Direction;
+import ExpositoryConstant.Resources;
 
 import java.awt.Color;
 
@@ -262,13 +263,13 @@ public class FloorMaps implements ExpositoryConstant {
 	public boolean playerCanMove (Direction dir) {
 		switch (dir) {
 		case UP:
-			return player.getY() - 1 >= 0 && getTile(player.getX(), player.getY() - 1) != ",";
+			return Resources.player.getY() - 1 >= 0 && getTile(Resources.player.getX(), Resources.player.getY() - 1) != ",";
 		case DOWN:
-			return player.getY() + 1 < WORLD_HEIGHT - 1 && getTile(player.getX(), player.getY() + 1) != ","; 
+			return Resources.player.getY() + 1 < WORLD_HEIGHT - 1 && getTile(Resources.player.getX(), Resources.player.getY() + 1) != ","; 
 		case LEFT:
-			return player.getX() - 1 >= 0 && getTile(player.getX() - 1, player.getY()) != ","; 
+			return Resources.player.getX() - 1 >= 0 && getTile(Resources.player.getX() - 1, Resources.player.getY()) != ","; 
 		case RIGHT:
-			return player.getX() + 1 < WORLD_WIDTH && getTile(player.getX() + 1, player.getY()) != ",";
+			return Resources.player.getX() + 1 < WORLD_WIDTH && getTile(Resources.player.getX() + 1, Resources.player.getY()) != ",";
 		}
 		return false;
 	}
@@ -284,7 +285,7 @@ public class FloorMaps implements ExpositoryConstant {
 		currentTerrain = (String) tiles[y][x].get(terrain.TILE.ordinal());
 		tiles[y][x].set(terrain.TILE.ordinal(), "@");
 		
-		switch (player.getMostRecentMove()) {
+		switch (Resources.player.getMostRecentMove()) {
 		case UP: 
 			tiles[y + 1][x].set(terrain.TILE.ordinal(), prevTerrain); break;
 		case DOWN: 
@@ -313,8 +314,8 @@ public class FloorMaps implements ExpositoryConstant {
 	 * to move the tile in.
 	 */
 	public void moveTile(Direction dir) {
-		player.setMostRecentMove(dir);
-		player.move(dir);
-		currentFloor.updatePlayerLocOnMap(player.getX(), player.getY());
+		Resources.player.setMostRecentMove(dir);
+		Resources.player.move(dir);
+		Resources.currentFloor.updatePlayerLocOnMap(Resources.player.getX(), Resources.player.getY());
 	}
 }

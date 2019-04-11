@@ -1,31 +1,18 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.util.Vector;
+package GUI;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import javax.swing.Timer;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.Document;
 
 import ExpositoryConstant.ExpositoryConstant;
 import GUI_Event_Handlers.ConsoleListener;
 
-
-public class LatopText extends JScrollPane implements ExpositoryConstant {
+public class Laptop extends JPanel implements ExpositoryConstant {
 	
 	/* Instance Variables */
-	private JTextArea console = new JTextArea();
+	private JLabel keyLabel;
 	private ConsoleListener consoleListener = null;
 	private int historyIndex = 0;
 	private Vector<String> historyString = new Vector<String>();
@@ -34,30 +21,26 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 	private boolean logIn = false;
 	private boolean loggingIn = false;
 	
-	public LatopText() {
-		console.setEditable(false);
-		console.setLineWrap(true);
-		DefaultCaret caret = (DefaultCaret)console.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		console.setBackground(BG_COLOR);
-		console.setForeground(NORMAL_COLOR);
-		console.setFont(new Font (Font.MONOSPACED, Font.PLAIN, 20));
+	/**
+	 * Constructor for Laptop class. Initialises the keyBinding associated with this class.
+	 * Sets the layout to flow layout.
+	 */
+	public Laptop() {
+		this.setLayout(new FlowLayout(FlowLayout.LEADING));
 		setKeyBindings();
-		this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.setViewportView(console);
 	}
-	
-	public void bootLaptop() {
-		console.setText("Laptop Booted.\n"
-					+ "\n"
-					+ "Possible Actions:\n"
-					+ "> :Login\n"
-					+ "> :exit\n"
-					+ "\n"
-					+ "> ");
+
+	/**
+	 * Main method of the class. Initialises a label, formats it and add its on the JPanel
+	 */
+	public void runLaptop() {
+		keyLabel = new JLabel("");
+		keyLabel.setFont(new Font (Font.MONOSPACED, Font.PLAIN, 20));
+//		keyLabel.setForeground(NORMAL_COLOR);
+		this.setBackground(BG_COLOR);
+		this.add(keyLabel);
+		print();
 	}
-	
 
 	public void slowPrint(String text, int delay) {
 		Timer timer = new Timer (delay, null);
@@ -65,7 +48,8 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 			int textPos = 0;
 			@Override
 			public void actionPerformed (ActionEvent e) {
-				printText(String.valueOf(text.charAt(textPos)));
+				oldText += text.charAt(textPos ++);
+				print();
 				if (textPos >= text.length()) {
 					timer.stop();
 				}
@@ -82,8 +66,8 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 			public void actionPerformed (ActionEvent e) {
 				visibility += TEXT_FADE_DELAY;
 				if (visibility < VISIBLE) {
-					console.setForeground(new Color (visibility, visibility, visibility));	
-					console.revalidate();
+					keyLabel.setForeground(new Color (visibility, visibility, visibility));	
+					keyLabel.revalidate();
 				} else {
 					timer.stop();
 				}
@@ -92,6 +76,18 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 		timer.start();
 	}
 	
+	public void bootLaptop() {
+		oldText = "Laptop Booted.<br>"
+				+ "<br>"
+				+ "Possible Actions:<br>"
+				+ "> :Login<br>"
+				+ "> :exit<br>"
+				+ "<br>"
+				+ "> ";
+		print();
+		fadeIn();
+	}
+
 	public void setLoggingIn(boolean b) {
 		loggingIn = b;
 	}
@@ -108,8 +104,8 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 		logIn = loginStatus;
 	}
 	
-	public static long hash(String commandResponse) {
-		long hashCode = 0;
+	public static int hash(String commandResponse) {
+		int hashCode = 0;
 		
 		for (int i = 0; i < commandResponse.length(); i ++) {
 			hashCode += Math.pow(HASH_CONSTANT, i) * ((int)commandResponse.charAt(i));
@@ -129,6 +125,16 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
     	consoleListener = c;
     }
     
+
+	/**
+	 * Allows client-side code to output values onto the Laptop class JPanel
+	 * @param toPrint
+	 */
+	public void print(String toPrint) {
+		currentString.fromString(toPrint.split(""));
+		print();
+	}
+    
 	/**
 	 * Handles the alphabetical key presses on the keyboard, 
 	 * along with "Enter", "Space-bar", and "Backspace".
@@ -145,7 +151,7 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 			space();
 		} else if (key != KeyEvent.CHAR_UNDEFINED) {
 			currentString.add(String.valueOf(Character.toChars(key)));
-			printText(String.valueOf(((char)key)));
+			print();
 		}
 	}
 	
@@ -159,26 +165,17 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 			commandResponse = consoleListener.receiveCommand(commandToCommit);
 		}
 		currentString.clear();
-		historyString.add(commandToCommit);
-		printText("\n" + commandResponse);
+		oldText += commandToCommit + "<br>" + commandResponse;
+		print();
 	}
 
 	/**
 	 * Handles the text formatting in the JLabel, keyLabel, after the user presses "Backspace"
 	 */
 	private void backspace() {
-		System.out.println("BACKSPACE METHOD CALLED");
 		if (!currentString.isEmpty()) {
-			System.out.println("DOING MA THIGN");
-			String text = console.getText();
-			text = text.substring(0, text.length() - 1);
-			console.setText(text);
-			String currentStringText = currentString.toString().substring(0, currentString.toString().length() - 1);
-			currentString.clear();
-			if (!currentStringText.equals("")) {
-				currentString.fromString(currentStringText.split(""));	
-			}
-			System.out.println(currentString.size() + "\n" + currentString.toString());
+			currentString.remove(currentString.size() - 1);
+			print();
 		}
 	}
 	
@@ -188,7 +185,7 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 	@SuppressWarnings("unchecked")
 	private void space() {
 		currentString.add(" ");
-		printText(" ");
+		print();
 	}
 	
 	//A little buggy pressing down will skip to the second earliest character instead of the earliest one
@@ -198,12 +195,7 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 	 * or the earlier cmds.
 	 */
 	private void displayHistory(int toDisplay) {
-		String text = console.getText();
-		text = text.substring(0, text.length() - currentString.size());
-		console.setText(text);
-		
 		if (historyString.isEmpty()) {
-			System.out.println("HISTROY IS EMPTY :(");
 			return;
 		}
 		if (toDisplay == MOST_RECENT) {
@@ -226,19 +218,18 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 			currentString.fromString(history.split(""));	
 		}
 		
-		
-		printText(currentString.toString());
+		print();
 	}
 	
 	/**
-	 * printTexts value of what the user has written thus far to the JLabel, keyLabel,
+	 * Prints value of what the user has written thus far to the JLabel, keyLabel,
 	 * by changing the text value associated with the JLabel
 	 */
-	private void printText(String toPrint) {
-		console.append(toPrint);
+	private void print() {
+		keyLabel.setText("<html>" + oldText + currentString.toString() + " </html>");
+		repaint();
 	}
 
-	
 	/**
 	 * Maps the various Key actions of the user to the various possible action within the class.
 	 */
@@ -312,31 +303,31 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 		}
 		 @Override
 	      public void actionPerformed(ActionEvent actionEvt) {
-			 System.out.println("UP KEY PRESED");
 	    	  displayHistory(MOST_RECENT);
 	      }
 	}
+
 }
 
-class ConsoleVector extends Vector {
-	
-	public ConsoleVector() {
-        super();
-    }
-	
-	@SuppressWarnings("unchecked")
-    public void fromString(String[] p) {
-        for (int i = 0; i < p.length; i++) {
-            this.add(p[i]);
-        }
-    }
-
-    @Override
-    public String toString() {
-        StringBuffer s = new StringBuffer();
-        for (int i = 0; i < this.size(); i++) {
-            s.append(this.get(i));
-        }
-        return s.toString();
-    }
-}
+//class ConsoleVector extends Vector {
+//	
+//	public ConsoleVector() {
+//        super();
+//    }
+//	
+//	@SuppressWarnings("unchecked")
+//    public void fromString(String[] p) {
+//        for (int i = 0; i < p.length; i++) {
+//            this.add(p[i]);
+//        }
+//    }
+//
+//    @Override
+//    public String toString() {
+//        StringBuffer s = new StringBuffer();
+//        for (int i = 0; i < this.size(); i++) {
+//            s.append(this.get(i));
+//        }
+//        return s.toString();
+//    }
+//}

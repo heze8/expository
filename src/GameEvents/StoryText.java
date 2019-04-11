@@ -1,39 +1,42 @@
+package GameEvents;
 import java.awt.*;
 import java.util.*;
 
 import javax.swing.*;
 
-import ExpositoryConstant.ExpositoryConstant; 
+import ExpositoryConstant.ExpositoryConstant;
+import GUI.LatopText; 
 
 public class StoryText implements ExpositoryConstant {
-	private int exploreState = -1;
+	private int numTimesExplore = -1;
 	
 	public String explore() {
 		ArrayList<String> exploreStory = new ArrayList<String>() {{
 			add("The floor here you're on is cool and solid. Titanium.");
-			add("Your body refuses to listen to your commands to get up."
-					+ " It's as if you've been in a slumber for too long."
-					+ " Your shirt is stiff and hard."
-					+ " An outline of white tracing a large napkin-like shape noticeable on the black fabric."
-					+ " In you right hand, a paper. \"Amelia2604\" in black ink.");
-			add("As you turn your attention outwards, the four walls greeted you with a featureless dull gray stare. "
-					+ " Directly opposite, in the left corner, you noticed a rather conspicuous computing unit sitting on the floor");
-			add("The screen of the computers flickers ever so slightly, almost as if sending some hidden message, inviting you in...");
-			add("~~~~~~~Using the only glowing object, you noticed a rectangular seam in wall to your right");
-			add("");
-			add("");
-			add("A bionic camel, trudging across the horiontal plane."
-					+ "Each step brings a jerk in its rear left leg"
-					+ "");
+			add("A tank of water lay in one corner"
+					+ "Four walls greet you with a featureless dull gray stare.");
+			add( "Directly opposite, in the left corner, a computing unit sits on the floor...");
+			add( "A piece of paper lay crumpled next it the computing unit. Amelia2604, it says.");
+			add( "A seam can be seen on the right wall");
+			add( "There seems to be nothing else worth exploring here...");
 		}};
-		if (exploreState != 6) {
-			return exploreStory.get(++exploreState);	
+		if (numTimesExplore != 5) {
+			return exploreStory.get(++numTimesExplore);	
 		}
-		return exploreStory.get(exploreState);
+		return exploreStory.get(numTimesExplore);
 	}
 	
-	public int getExploreState() {
-		return exploreState;
+//	+ "Your body refuses to listen to your commands to get up."
+//	+ " It's as if you've been in a slumber for too long."
+//	+ " Your shirt is stiff and hard."
+//	+ " An outline of white tracing a large napkin-like shape noticeable on the black fabric."
+//	+ " In you right hand, a paper. \"Amelia2604\" in black ink.");
+//	"A bionic camel, trudging across the horiontal plane."
+//	+ "Each step brings a jerk in its rear left leg"
+//	+ ""
+	
+	public int getnumTimesExplore () {
+		return numTimesExplore;
 	}
 	
 	public String laptopReply(String command, LatopText laptop, CardLayout overallContainerCL, JPanel mainContainer) {
