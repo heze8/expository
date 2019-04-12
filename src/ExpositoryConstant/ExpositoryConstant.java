@@ -221,5 +221,10 @@ public interface ExpositoryConstant {
 	/////////////////////
 	// Event CONSTANTS //
 	/////////////////////
-	
+	public enum LootSource {
+		SCAVENGE,
+		WINNING_FIGHTS,
+		EXPLORATION,
+		ROBBING;
+	}
 }

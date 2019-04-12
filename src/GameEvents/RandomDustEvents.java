@@ -6,16 +6,31 @@ import ExpositoryConstant.ExpositoryConstant;
 
 public class RandomDustEvents implements ExpositoryConstant {
 	
-	public static void rngLoot() {
-		int rand = ThreadLocalRandom.current().nextInt(1, 101);
+	public static void rngLoot(LootSource source) {
+		switch (source) {
+		case EXPLORATION:
+			int loot = ThreadLocalRandom.current().nextInt(1, 101);
+			if (loot < 50) {
+				
+			}
+			break;
+		case ROBBING:
+			break;
+		case SCAVENGE:
+			break;
+		case WINNING_FIGHTS:
+			break;
+		default:
+			break;
+		}
 		
-		Ores 50%
-		Copper 15%
-		cloth 10%
-		Glass shards 15%
-		Metal alloy 2%
-		Also some possibility of finding blueprint 8%
-		Will unlock various options to build things within the spaceship
+//		Ores 50%
+//		Copper 35%
+//		cloth 50
+//		Glass shards 50%
+//		Metal alloy 10%
+//		Also some possibility of finding blueprint 15%
+//		Will unlock various options to build things within the spaceship
 
 	}
 }

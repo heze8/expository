@@ -105,7 +105,7 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 			break;
 		
 		case "Scavenge":
-			RandomDustEvents.rngLoot();
+			RandomDustEvents.rngLoot(LootSource.EXPLORATION);
 			break;
 			
 		case "Unknown":
