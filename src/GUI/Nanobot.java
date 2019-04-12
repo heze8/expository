@@ -14,6 +14,7 @@ import GUI_Event_Handlers.NanobotListener;
 import GUI_Event_Handlers.PlusMinusListener;
 
 public class Nanobot extends JPanel implements ExpositoryConstant {
+	public static int totalBot = 0;
 	private int maxFreeCapacity = 5;
 	private int currFreeCapacity = maxFreeCapacity;
 	private Button fuel;
@@ -21,6 +22,10 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 	private Button upgrade;
 	private PlusMinusBtn parameters;
 	private JPanel controls;
+	
+	private boolean fueled = false;
+	private boolean repaired = false;
+	
 	private HashMap<String, Integer> params = new HashMap<String, Integer>();
 	private EventListenerList listenerList = new EventListenerList();	
 	
@@ -33,7 +38,8 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 			public void run() {
 				Timer timer = new Timer(SEC_TO_MSEC, new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						eventOccurred();
+						if (fueled && repaired)
+							eventOccurred();
 					}
 				});
 				timer.start();
@@ -60,26 +66,17 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 
 	private void initControlsPanel(JPanel controls) {
 		fuel = new Button("Fuel", false);
-		fuel.addBtn("Fuel", 20, true);
+		fuel.addBtn("Fuel", NANOBOT_LIFESPAN, true);
+		fuel.addButtonListener(new buttonListenerForBots(JobForBots.FUEL));
 		
 		health = new Button("Health", false);
-		health.addBtn("Repair", 20, true);
+		health.addBtn("Repair", NANOBOT_LIFESPAN, true);
+		health.addButtonListener(new buttonListenerForBots(JobForBots.REPAIR));
 		
 		upgrade = new Button("Capacity: " + currFreeCapacity + "/" + maxFreeCapacity, true);
 		upgrade.addBtn("Upgrade", NO_WAIT, true);
-		upgrade.addButtonListener(new ButtonListener () {
-			@Override
-			public void buttonPressed (ButtonEvent be) {
-			}
-			@Override
-			public boolean buttonClickable(HashMap<String, Integer> costMap) {
-				if (repairOccurred(costMap)) {
-					upgrade();
-					return true;
-				}
-				return false;
-			}
-		});
+		upgrade.addButtonListener( new buttonListenerForBots(JobForBots.UPGRADE));
+				
 		upgrade.setToolTip("Upgrade", "Cost: ");
 		upgrade.setBtnCost("Upgrade", new HashMap<String, Integer> () {{
 			put("Water", 10);
@@ -122,11 +119,47 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 		params.put(param, 0);
 	}
 	
-	public void upgrade() {
+	private void upgrade() {
 		maxFreeCapacity += 5;
 		currFreeCapacity += 5;
 		upgrade.setTitle("Capacity: " + currFreeCapacity + "/" + maxFreeCapacity);
 		upgrade.repaint();
+	}
+	
+	private void fuelAndOrRepair(JobForBots j) {
+		switch (j) {
+		
+		case REPAIR:
+			System.out.println("repaired/");
+			repaired = true;
+			break;
+		case FUEL:
+			System.out.println("/fueled");
+			fueled = true;
+			break;
+		default:
+			break;
+		}
+		
+		Timer validity = new Timer (NANOBOT_LIFESPAN * SEC_TO_MSEC, new ActionListener () {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				System.out.println("bot broken");
+				switch (j) {
+				case REPAIR:
+					repaired = false;
+					break;
+				case FUEL:
+					fueled = false;
+					break;
+				default:
+					break;
+				}
+			}
+		});
+		validity.setRepeats(false);
+		validity.start();
+		System.out.println("timer started");
 	}
 	
 	public void eventOccurred() {
@@ -154,5 +187,45 @@ public class Nanobot extends JPanel implements ExpositoryConstant {
 	
 	public void removeNanobotListener(NanobotListener nl) {
 		listenerList.remove(NanobotListener.class, nl);
+	}
+	
+	private class buttonListenerForBots implements ButtonListener {
+		private JobForBots repairJob = JobForBots.NOTHING;
+		
+		public buttonListenerForBots(JobForBots j) {
+			repairJob = j;
+		}
+ 
+		@Override
+		public void buttonPressed(ButtonEvent be) {
+		}
+
+		@Override
+		public boolean buttonClickable(HashMap<String, Integer> costMap) {
+			if (repairOccurred(costMap)) {
+				switch (repairJob) {
+				case UPGRADE:
+					upgrade();
+					break;
+				case FUEL:
+					fuelAndOrRepair(JobForBots.FUEL);
+					break;
+				case REPAIR:
+					fuelAndOrRepair(JobForBots.REPAIR);
+					break;
+				default:
+					break;
+				}
+				return true;
+			}
+			return false;
+		}
+	}
+	
+	private enum JobForBots {
+		UPGRADE,
+		REPAIR,
+		FUEL,
+		NOTHING;
 	}
 }

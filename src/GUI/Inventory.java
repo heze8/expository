@@ -1,6 +1,5 @@
 package GUI;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -13,10 +12,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import ExpositoryConstant.ExpositoryConstant;
+import ExpositoryConstant.Resources;
 
 public class Inventory extends JPanel implements ExpositoryConstant {
-	private int currRow = 0;
-	private GridBagConstraints gc = new GridBagConstraints();
 	private HashMap<String, JLabel> inventoryDB = new HashMap<String, JLabel>();
 	
 	/**
@@ -26,16 +24,23 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	 * @param titleString is of type String, provides the title for the inventory
 	 */
 	public Inventory (String titleString) {
+		this.setBackground(BG_COLOR);
 		
-		TitledBorder title;
-		title = BorderFactory.createTitledBorder(titleString);
 		Border margin = new EmptyBorder(MARGIN_TOP_BOTTOM_INVEN
         		, INVENTORY_WIDTH_MARGIN
         		, MARGIN_TOP_BOTTOM_INVEN
         		, INVENTORY_WIDTH_MARGIN);
-        setBorder(new CompoundBorder(title, margin));
-        
-        setLayout(new GridBagLayout());
+		
+		TitledBorder title = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(NORMAL_COLOR), 
+				titleString, 
+				TitledBorder.CENTER, 
+				TitledBorder.TOP, 
+				new Font (STORY_FONT, Font.BOLD, 12), 
+				NORMAL_COLOR);
+	    setBorder(new CompoundBorder(title, margin));
+	    
+	    setLayout(new GridLayout( 0 , 2, 40, 10));
+	    
 	}
 	
 	/**
@@ -47,23 +52,13 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	 */
 	public void addEntry (String name, int quantity) {
 		JLabel entry = new JLabel(name);
+		entry.setForeground(NORMAL_COLOR);
 		JLabel quantityLabel = new JLabel("" + quantity);
+		quantityLabel.setForeground(NORMAL_COLOR);
 		inventoryDB.put(name, quantityLabel);
 		
-		//Adding to JPanel display
-		gc.weightx = 1;
-		gc.weighty = 1;
-		
-		//Adding Name of inventory item
-		gc.gridx = 0;
-		gc.gridy = currRow ++;
-		gc.anchor = GridBagConstraints.FIRST_LINE_START;
-		add(entry, gc);
-		
-		//Adding quantity of inventory item
-		gc.gridx = 1;
-		gc.anchor = GridBagConstraints.FIRST_LINE_END;
-		add(quantityLabel, gc);
+		add(entry);
+		add(quantityLabel);		
 	}
 	
 	/**
@@ -103,23 +98,25 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	}
 	
 	/**
-	 * Increments the quantity of a particular item by 1. Item must already exist.
+	 * Increments the quantity of a particular item. Item must already exist.
 	 * @param name of type String, provides the name of the item for which the 
 	 * quantity is to be incremented.
-	 * @throws IllegalAccessException if @param name does not exist
+	 * @param quantity of type int, provides the amount to increase the item quantity by
 	 */
-	public void increseQuantity (String item) {
-		inventoryDB.get(item).setText("" + (getQuantity(item) + 1));
+	public void increseQuantity (String item, int quantity) {
+		inventoryDB.get(item).setText("" + (getQuantity(item) + quantity));
 	}
 
 	/**
-	 * Decreases the quantity of a particular item by 1. Item must already exist.
+	 * Decreases the quantity of a particular item. Item must already exist.
 	 * @param name of type String, provides the name of the item for which the 
 	 * quantity is to be decreased.
-	 * @throws IllegalAccessException if @param name does not exist
+	 * @param quantity of type int, provides the amount to decrease the item quantity by
 	 */
-	public void decreaseQuantity (String item) {
-		inventoryDB.get(item).setText("" + (getQuantity(item) - 1));
+	public void decreaseQuantity (String item, int quantity) {
+		if (getQuantity(item) - quantity >= 0) {
+			inventoryDB.get(item).setText("" + (getQuantity(item) - quantity));
+		}
 	}
 	
 	/**
@@ -128,5 +125,9 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	 */
 	public Set<String> getItemSet () {
 		return inventoryDB.keySet();
+	}
+	
+	public boolean isEmpty() {
+		return inventoryDB.isEmpty();
 	}
 }

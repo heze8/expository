@@ -137,7 +137,8 @@ public class LaptopReply implements ExpositoryConstant {
 		case "Y":
 		case "Yes":
 		case "yes":
-			Resources.story.displayText("A rectangular protrusion in one of the walls is now noticeable");
+			Resources.story.displayText("one of the walls now spot a rectangular protrusion");
+			Resources.currExploreEvent = ExploreBtnEvent.FIND_DOOR;
 			Resources.laptop.setSimulatingReality(true);
 			return "Reality Simulated..."
 				+ "\n" + USERNAME;

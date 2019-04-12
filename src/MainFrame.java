@@ -6,12 +6,14 @@ import ExpositoryConstant.Resources;
 import GUI.*;
 import GUI_Event_Handlers.*;
 import GameEvents.LaptopReply;
-import GameEvents.UserGeneratedRoomEvents;
+import GameEvents.RandomEvent;
+import GameEvents.RandomRoomEvents;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.util.HashMap;
 
-public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventListener, ConsoleListener, NanobotListener{
+public class MainFrame extends JFrame implements ExpositoryConstant {
 	
 	/**
 	 * Constructor which initializes the overall JFrame of the application
@@ -30,7 +32,6 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 	 * Adds listener to the components as well.
 	 */
 	private void loadGUI() {
-		
 		//Creating the JPanels that will store the various components
 		Resources.mainContainer = new JPanel(Resources.overallContainerCL);
 		Resources.mainGUI = new JPanel(new BorderLayout());
@@ -69,110 +70,53 @@ public class MainFrame extends JFrame implements ExpositoryConstant, HUDEventLis
 		Resources.mainContainer.add(Resources.laptop, LAPTOP);
 		
 		this.add(Resources.mainContainer);
-		
-		//Adding Listeners to the various components
-		Resources.yourRoom.addHUDEventListener(this);
-		Resources.spaceShip.addHUDEventListener(this);
-		Resources.dust.addHUDEventListener(this);
-		Resources.location.addHUDEventListener(this);
-		Resources.laptop.addConsoleListener(this);	
+	
+		Resources.laptop.addConsoleListener(new ConsoleListenerImplementation());	
 	}
 	
-	
+	/**
+	 * Starts the game by initializing the intro buttons and text
+	 */
 	public void playGame() {
 		Resources.story.displayText("The World Comes into Vision");
 		initRoomControls();
 		initLocationControls();
-//		dust.addButtonGroup("TEST", true);
-//		dust.addButton("TEST", "HOME", 0, true);
-//		
-//		Resources.inven.createInvenGroup("Stores", new HashMap<String, Integer>() {{
-//			put("Water", 0);
-//		}});
-//		
-//		Nanobot test = new Nanobot("TestBot");
-//		test.addNanobotListener(this);
-//		spaceShip.add(test);
-//		
-//			
+		initInventoryGroupd();
+		RandomEvent.beginRandomEvents();
 	}
 
+	/**
+	 * Initializes the initial buttons available to the user in "Unknown" location
+	 */
 	private void initRoomControls() {
 		Resources.yourRoom.addButtonGroup("Actions", false, new HashMap<String, Integer>() {{
-		    put ("Explore", 5);
+		    put ("Explore", DEFAULT_WAIT);
 		}}, true);
+		Resources.yourRoom.setBtnCost("Actions", "Explore", new HashMap<String, Integer> () {{
+			put (StoreItems.WATER.toString(), 1);
+		}});
 	}
 
+	/**
+	 * Initializes the initial location available to the user ("Unknown")
+	 */
 	private void initLocationControls() {
 		Resources.location.addButtonGroup("Your Room", false, new HashMap<String, Integer> () {{
 			put ("Unknown", NO_WAIT);
 		}}, false);
-//		location.addButtonGroup("Spaceship", false, new HashMap<String, Integer> () {{
-//			put ("|    Spaceship     |", NO_WAIT);
-//		}}, false);
-//		location.addButtonGroup("Dust", false, new HashMap<String, Integer> () {{
-//			put ("Dust", NO_WAIT);
-//		}}, false);
-	}
-
-	@Override
-	public void buttonPressed(ButtonEvent be) {
-		String btnName = be.getBtnName();
-		UserGeneratedRoomEvents.handleButtonEvent (btnName);
 	}
 	
-	@Override
-	public boolean buttonClickable(HashMap<String, Integer> costMap) {
-		boolean repairable = true;
-		Inventory stores = Resources.inven.getInventory("Stores");
-		if (costMap != null) {
-			for (String item : costMap.keySet()) {
-				if (stores.getQuantity(item) < costMap.get(item)) {
-					repairable = false;
-					Resources.story.displayText("Not enough " + item);
-					return repairable;
-				} else {
-					stores.setQuantity(item, stores.getQuantity(item) - costMap.get(item));
-					Resources.story.displayText("Button clicked");
-				}
-			}
-		}
-		return repairable;
-	}
-	
-	@Override
-	public String receiveCommand(String command) {
-		return LaptopReply.replyTo(command);
-	}
-
-	@Override
-	public void nanobotEventOccurred(HashMap<String, Integer> valuesForUpdating) {
-		Inventory stores = inven.getInventory("Stores");
-		for (String name : valuesForUpdating.keySet()) {
-			stores.setQuantity(name, stores.getQuantity(name) + valuesForUpdating.get(name));
-		}
-	}
-
-	@Override
-	public boolean nanobotRepairOccurred(HashMap<String, Integer> costMap) {
-		boolean repairable = true;
-		Inventory stores = inven.getInventory("Stores");
-		for (String item : costMap.keySet()) {
-			if (stores.getQuantity(item) < costMap.get(item)) {
-				repairable = false;
-				story.displayText("Not enough " + item);
-				return repairable;
-			} else {
-				stores.setQuantity(item, stores.getQuantity(item) - costMap.get(item));
-				story.displayText("NanoBot upgraded");
-			}
-		}
-		return repairable;
-	}
-
-	@Override
-	public boolean plusMinusClicked(String command, String param) {
-		// TODO Auto-generated method stub
-		return false;
+	/**
+	 * Initializes the inventory needed throughout the game
+	 */
+	private void initInventoryGroupd() {
+		// Create an Inventory group called "Stores" and adds the item "Water" to it
+		Resources.inven.createInvenGroup(STORES);
+		Resources.inven.addInvenItem(STORES, StoreItems.WATER.toString(), 10);
+		
+		// Create an Inventory group called "Weapons"
+		Resources.inven.createInvenGroup(WEAPONS);
+		// Create an Inventory group called "Spaceship Parts"
+		Resources.inven.createInvenGroup(SPACESHIP_PARTS);
 	}
 }

@@ -9,9 +9,7 @@ import javax.swing.border.*;
 import javax.swing.event.EventListenerList;
 
 import ExpositoryConstant.ExpositoryConstant;
-import GUI_Event_Handlers.ButtonEvent;
-import GUI_Event_Handlers.ButtonListener;
-import GUI_Event_Handlers.HUDEventListener;
+import GUI_Event_Handlers.ButtonListenerImplementation;
 
 public class PlayerHUD extends JPanel implements ExpositoryConstant {
 	
@@ -44,17 +42,7 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 		for (String name : buttonsToAdd.keySet()) {
 			buttonGroup.addBtn(name, buttonsToAdd.get(name), displayBorder);
 		}
-		buttonGroup.addButtonListener(new ButtonListener() {
-			@Override
-			public void buttonPressed(ButtonEvent be) {
-				buttonClicked(be);
-			}
-
-			@Override
-			public boolean buttonClickable(HashMap<String, Integer> costMap) {
-				return getIfButtonClickable(costMap);
-			}
-		});
+		buttonGroup.addButtonListener(new ButtonListenerImplementation());
 		buttonsDB.put(groupTitle, buttonGroup);
 		
 		add(buttonGroup);	
@@ -68,17 +56,7 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 	public void addButtonGroup(String btnGroupTitle, boolean displayTitle) {
 		Button buttonGroup = new Button (btnGroupTitle, displayTitle);
 		
-		buttonGroup.addButtonListener(new ButtonListener() {
-			@Override
-			public void buttonPressed (ButtonEvent be) {
-				
-			}
-
-			@Override
-			public boolean buttonClickable(HashMap<String, Integer> costMap) {
-				return getIfButtonClickable(costMap);
-			}
-		});
+		buttonGroup.addButtonListener(new ButtonListenerImplementation());
 		buttonsDB.put(btnGroupTitle, buttonGroup);
 		
 		add(buttonGroup);	
@@ -95,7 +73,6 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 		Button buttonGroup = buttonsDB.get(btnGroupTitle);
 		buttonGroup.addBtn(btnName, cooldown, displayBorder);
 	}
-	
 	
 	
 	public void changeBtnTitle(String btnGroupTitle, String newTitle) {
@@ -158,30 +135,30 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 		plusMinusControl.addPlusMinus(initQuantity, btnName, true);
 	}
 	
-	public void buttonClicked(ButtonEvent be) {
-		Object[] listeners = listenerList.getListenerList();
-		for (int i = 0; i < listeners.length; i += 2) {
-			if (listeners[i] == HUDEventListener.class) {
-				((HUDEventListener) listeners[i + 1]).buttonPressed(be);
-			}
-		}
-	}
-	
-	public boolean getIfButtonClickable(HashMap<String, Integer> costMap) {
-		Object[] listeners = listenerList.getListenerList();
-		for (int i = 0; i < listeners.length; i += 2) {
-			if (listeners[i] == HUDEventListener.class) {
-				return ((HUDEventListener) listeners[i + 1]).buttonClickable(costMap);
-			}
-		}
-		return false;
-	}
-	
-	public void addHUDEventListener(HUDEventListener HUDEventListener) {
-		listenerList.add(HUDEventListener.class, HUDEventListener);
-	}
-	
-	public void removeHUDEventListener(HUDEventListener HUDEventListener) {
-		listenerList.remove(HUDEventListener.class, HUDEventListener);
-	}
+//	public void buttonClicked(ButtonEvent be) {
+//		Object[] listeners = listenerList.getListenerList();
+//		for (int i = 0; i < listeners.length; i += 2) {
+//			if (listeners[i] == HUDEventListener.class) {
+//				((HUDEventListener) listeners[i + 1]).buttonPressed(be);
+//			}
+//		}
+//	}
+//	
+//	public boolean getIfButtonClickable(HashMap<String, Integer> costMap) {
+//		Object[] listeners = listenerList.getListenerList();
+//		for (int i = 0; i < listeners.length; i += 2) {
+//			if (listeners[i] == HUDEventListener.class) {
+//				return ((HUDEventListener) listeners[i + 1]).buttonClickable(costMap);
+//			}
+//		}
+//		return false;
+//	}
+//	
+//	public void addHUDEventListener(HUDEventListener HUDEventListener) {
+//		listenerList.add(HUDEventListener.class, HUDEventListener);
+//	}
+//	
+//	public void removeHUDEventListener(HUDEventListener HUDEventListener) {
+//		listenerList.remove(HUDEventListener.class, HUDEventListener);
+//	}
 }

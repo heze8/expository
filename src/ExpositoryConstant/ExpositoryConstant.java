@@ -17,6 +17,9 @@ public interface ExpositoryConstant {
 	public static final Color BG_COLOR = Color.BLACK;
 	public static final Color NORMAL_COLOR = Color.WHITE;
 	
+	/* Constant for random event occurrance */
+	public static final int RANDOM_OCCURRENCE_DELAY = 10000;
+	
 	/////////////////////////
 	// PlayerHUD CONSTANTS //
 	/////////////////////////
@@ -51,7 +54,6 @@ public interface ExpositoryConstant {
 	/* Constant for plusMinusBtn class for event firing */
 	public static final String DECREASE = "Decrease";
 	public static final String INCREASE = "Increase";
-	
 		
 	//////////////////////
 	// Button CONSTANTS //
@@ -72,7 +74,8 @@ public interface ExpositoryConstant {
 	
 	public static enum ExploreBtnEvent {
 		NOTHING,
-		FIND_NANOBOT;
+		FIND_NANOBOT,
+		FIND_DOOR;
 	}
 	
 	/* Constant for PlayerHUD control colors */
@@ -89,8 +92,11 @@ public interface ExpositoryConstant {
 	/* Constant for update interval for button cooldown control animation */
 	public static final int UPDATE_TIME = 50;
 	
-	/* Constant for buttons to have no cooldown time */
+	/* Constant for buttons to have various cooldown time */
 	public static final int NO_WAIT = 0;
+	public static final int DEFAULT_WAIT = 5;
+	public static final int LONG_WAIT = 10;
+	public static final int NANOBOT_LIFESPAN = 20;
 	
 	/////////////////////////
 	// Inventory CONSTANTS //
@@ -102,6 +108,35 @@ public interface ExpositoryConstant {
 	/* Constant for the Inventory margins */
 	public static final int MARGIN_TOP_BOTTOM_INVEN= 10;
 	public static final int INVENTORY_WIDTH_MARGIN = 10;
+	
+	/* Constants for the Inventory Names */
+	public static final String STORES = "Stores";
+	public static final String WEAPONS = "Weapons";
+	public static final String SPACESHIP_PARTS = "Spaceship Parts";
+	
+	public enum StoreItems {
+		METAL_ALLOY ("Metal Alloy"),
+		METAL_PLATES ("Metal Plates"),
+		CLOTH ("Cloth"),
+		WATER ("Water"),
+		ORES ("Ores"),
+		SILICON_CHIPS ("Silicon Chips"),
+		COPPER ("Copper"),
+		WIRES ("Wires"),
+		BATTERIES ("Batteries"),
+		GLASS_SHARDS ("Glass Shards"),
+		GLASS ("Glass");
+		
+		private String itemStringName;
+		StoreItems(String itemStringName) {
+			this.itemStringName = itemStringName;
+		}
+		
+		@Override
+		public String toString() {
+			return itemStringName;
+		}
+	}
 	
 	
 	/////////////////////
@@ -182,6 +217,9 @@ public interface ExpositoryConstant {
 		LEFT,
 		RIGHT;
 	}
-	
+		
+	/////////////////////
+	// Event CONSTANTS //
+	/////////////////////
 	
 }

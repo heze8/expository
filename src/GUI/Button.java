@@ -226,11 +226,13 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 					int btnWidth = pressed.getWidth();
 					int amountToShrinkEachUpdate = btnWidth / ((cooldown * SEC_TO_MSEC) / UPDATE_TIME);
 					
+					@SuppressWarnings("unchecked")
 					@Override
 					public void actionPerformed (ActionEvent e) {
 						btnWidth -= amountToShrinkEachUpdate;
 						clickedBtnDB.get(pressed.getText()).set(pressedBtnData.WIDTH.ordinal(), btnWidth);
 						repaint();
+						revalidate();
 						if (btnWidth <= 0) {
 							timer.stop();
 							pressed.setForeground(NORMAL_COLOR);
