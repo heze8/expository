@@ -52,6 +52,8 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 				Resources.dust.addButtonGroup("Actions", false);
 				Resources.dust.addButton("Actions", "Scavenge", DEFAULT_WAIT, true);
 				break;
+			default:
+				break;
 			}
 			if (Resources.currExploreEvent != ExploreBtnEvent.NOTHING) {
 				Resources.currExploreEvent = ExploreBtnEvent.NOTHING;
@@ -105,7 +107,13 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 			break;
 		
 		case "Scavenge":
-			RandomDustEvents.rngLoot(LootSource.EXPLORATION);
+			RandomDustEvents.rngLoot(LootSource.SCAVENGE);
+			if (Resources.inven.getInventory("Stores").getQuantity("Blueprint") != 0) {
+				Resources.yourRoom.addButton("Actions", "Use Blueprint", LONG_WAIT, true);
+				Resources.yourRoom.setBtnCost("Actions", "Use Blueprint", new HashMap<String, Integer>() {{
+					put ("Blueprint", 1);
+				}});
+			}
 			break;
 			
 		case "Unknown":
@@ -141,7 +149,7 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 			break;
 		case "|    Dust":
 		case "|    An Empty Desert":
-			// Displlays the dust tab where user can embark on the map hunting
+			// Displays the dust tab where user can embark on the map hunting
 			Resources.controllerCL.show(Resources.buttonContainer, DUST);
 			
 			//Displays The the inventory (Weapons and stores

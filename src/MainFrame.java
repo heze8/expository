@@ -59,9 +59,9 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 		Resources.buttonContainer.add(Resources.yourRoom, YOUR_ROOM);
 		Resources.buttonContainer.add(Resources.spaceShip, SPACESHIP);
 		Resources.buttonContainer.add(Resources.dustContainer, DUST);
-		Resources.dustContainer.add(Resources.mapBoard, MAP);
 		Resources.dustContainer.add(Resources.dust, DUST);
-        
+		Resources.dustContainer.add(Resources.mapBoard, MAP);
+		
 		//Adding the parent center, @name centerContainer, JPanels to the mainGUI
 		Resources.mainGUI.add(Resources.centerContainer, BorderLayout.CENTER);
 		
@@ -82,7 +82,6 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 		initRoomControls();
 		initLocationControls();
 		initInventoryGroupd();
-		RandomEvent.beginRandomEvents();
 	}
 
 	/**
@@ -90,7 +89,7 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 	 */
 	private void initRoomControls() {
 		Resources.yourRoom.addButtonGroup("Actions", false, new HashMap<String, Integer>() {{
-		    put ("Explore", DEFAULT_WAIT);
+		    put ("Explore", LONG_WAIT);
 		}}, true);
 		Resources.yourRoom.setBtnCost("Actions", "Explore", new HashMap<String, Integer> () {{
 			put (StoreItems.WATER.toString(), 1);

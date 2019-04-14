@@ -55,7 +55,7 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 		console.setText("Laptop Booted.\n"
 					+ "\n"
 					+ "Possible Actions:\n"
-					+ "> :Login\n"
+					+ "> :login\n"
 					+ "> :exit\n"
 					+ "\n"
 					+ "> ");

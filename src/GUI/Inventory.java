@@ -64,34 +64,28 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	/**
 	 * Gets the number of quantity associated with a particular item. Item must already exist.
 	 * Returns error if the item searched for cannot be found.
-	 * @param name of type String, provides the item for which the quantity associated
+	 * @param item of type String, provides the item for which the quantity associated
 	 * with it is to be retrieved
-	 * @return an int, representing the quantity associated with @param name.
-	 * @throws IllegalAccessException if the @param name is not found within the inventoryDB
+	 * @return an int, representing the quantity associated with @param item.
 	 */
 	public int getQuantity(String item) {
 		JLabel quantity = inventoryDB.get(item);
-		try{
-			if (quantity != null) {
-				int quant = Integer.parseInt(quantity.getText());
-				return quant;			
-			} 
-			else {
-				throw new IllegalAccessException();
-			} 
-		}
-		catch(IllegalAccessException e) {
-			System.out.println("Item " + item + " does not exist in inventory!");
-			return 0;
+		if (quantity != null) {
+			int quant = Integer.parseInt(quantity.getText());
+			return quant;			
+		} 
+		else {
+			addEntry (item, 0);
+			return getQuantity(item);
 		}
 	}
 	
 	/**
 	 * Allows user to update the quantity of a particular item
-	 * @param name of type String, provides the name of item for which
+	 * @param item of type String, provides the name of item for which
 	 * the quantity is to be updated for
 	 * @param newQuantity of type int, provides the newQuantity that will replace 
-	 * the current quantity value associated with @param name
+	 * the current quantity value associated with @param item
 	 */
 	public void setQuantity (String item, int newQuantity) {
 		inventoryDB.get(item).setText("" + newQuantity);
@@ -99,17 +93,22 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 	
 	/**
 	 * Increments the quantity of a particular item. Item must already exist.
-	 * @param name of type String, provides the name of the item for which the 
+	 * @param item of type String, provides the name of the item for which the 
 	 * quantity is to be incremented.
 	 * @param quantity of type int, provides the amount to increase the item quantity by
 	 */
 	public void increseQuantity (String item, int quantity) {
-		inventoryDB.get(item).setText("" + (getQuantity(item) + quantity));
+		if (inventoryDB.get(item) != null) {
+			inventoryDB.get(item).setText("" + (getQuantity(item) + quantity));		
+		} else {
+			int newQuantity = getQuantity(item) + quantity;
+			inventoryDB.get(item).setText("" + newQuantity);
+		}
 	}
 
 	/**
 	 * Decreases the quantity of a particular item. Item must already exist.
-	 * @param name of type String, provides the name of the item for which the 
+	 * @param item of type String, provides the name of the item for which the 
 	 * quantity is to be decreased.
 	 * @param quantity of type int, provides the amount to decrease the item quantity by
 	 */
@@ -127,6 +126,10 @@ public class Inventory extends JPanel implements ExpositoryConstant {
 		return inventoryDB.keySet();
 	}
 	
+	/**
+	 * Returns true if the inventory is empty
+	 * @return true if the inventory is empty
+	 */
 	public boolean isEmpty() {
 		return inventoryDB.isEmpty();
 	}

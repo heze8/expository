@@ -207,7 +207,7 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 				clickedBtnDB.put(pressedBtnLabel, new Vector() {{
 					add(pressed.getX());
 					add(pressed.getY());
-					add(pressed.getWidth());
+					add((double) pressed.getWidth());
 					add(pressed.getHeight());
 				}});
 				coolDownAnimation(pressed, cooldown);
@@ -223,8 +223,8 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 			public void run() {
 				Timer timer = new Timer (UPDATE_TIME, null);
 				timer.addActionListener(new ActionListener() {
-					int btnWidth = pressed.getWidth();
-					int amountToShrinkEachUpdate = btnWidth / ((cooldown * SEC_TO_MSEC) / UPDATE_TIME);
+					double btnWidth = pressed.getWidth();
+					double amountToShrinkEachUpdate = btnWidth / ((cooldown * SEC_TO_MSEC) / UPDATE_TIME);
 					
 					@SuppressWarnings("unchecked")
 					@Override
@@ -255,7 +255,7 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
         for (String pressed : clickedBtnDB.keySet()) {
         	int x = (int) clickedBtnDB.get(pressed).get(pressedBtnData.X_POS.ordinal());
         	int y = (int) clickedBtnDB.get(pressed).get(pressedBtnData.Y_POS.ordinal());
-        	int btnWidth = (int) clickedBtnDB.get(pressed).get(pressedBtnData.WIDTH.ordinal());
+        	int btnWidth = (int) ((Double) clickedBtnDB.get(pressed).get(pressedBtnData.WIDTH.ordinal())).intValue();
         	int btnHeight = (int) clickedBtnDB.get(pressed).get(pressedBtnData.HEIGHT.ordinal());
         	g.fillRect(x, y, btnWidth, btnHeight);
         }

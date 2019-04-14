@@ -57,7 +57,7 @@ public class LaptopReply implements ExpositoryConstant {
 		}
 		
 		switch (command) {
-		case ":Login":
+		case ":login":
 			// Already Logged in
 			if(Resources.laptop.isLoggedIn()) 
 				return "Already Logged In.\n"

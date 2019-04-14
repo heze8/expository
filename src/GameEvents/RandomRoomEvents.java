@@ -1,15 +1,29 @@
 package GameEvents;
 
-import java.util.concurrent.ThreadLocalRandom;
-
+import java.util.ArrayList;
+import java.util.List;
 import ExpositoryConstant.ExpositoryConstant;
 import ExpositoryConstant.Resources;
+import StoryData.Parser;
 
 public class RandomRoomEvents implements ExpositoryConstant {
 	private static boolean nanobotFound = false;
+	private static Parser randomRoomEvents = new Parser("randomRoomEvents.txt");
+	private static ArrayList<String> events = randomRoomEvents.retrieve();
 
 	public static void getEvent() {
-		int toDisplay = ThreadLocalRandom.current().nextInt(1, 6);
+		int toDisplay = (int) (Math.random() * events.size());
+		if(toDisplay == 0 && !nanobotFound) {
+			Resources.currExploreEvent = ExploreBtnEvent.FIND_NANOBOT;
+			nanobotFound = true;
+			Resources.story.displayText(events.get(toDisplay));
+		
+			events.remove(0);
+		}
+
+		Resources.story.displayText(events.get(toDisplay));
+		
+		/** 
 		switch (toDisplay) {
 		
 		case 1:
@@ -35,7 +49,8 @@ public class RandomRoomEvents implements ExpositoryConstant {
 			}
 			break;
 			
-		}
+		} */
+		
 					
 	}
 

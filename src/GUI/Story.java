@@ -85,6 +85,5 @@ public class Story extends JPanel implements ExpositoryConstant {
 		});
 		reColoringOldText.start();
 	}
-
 	
 }
