@@ -1,6 +1,7 @@
 import javax.swing.*;
 
 import Adventure.AdventureMapBoard;
+import ExpositoryConstant.CostMap;
 import ExpositoryConstant.ExpositoryConstant;
 import ExpositoryConstant.Resources;
 import GUI.*;
@@ -91,9 +92,7 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 		Resources.yourRoom.addButtonGroup("Actions", false, new HashMap<String, Integer>() {{
 		    put ("Explore", LONG_WAIT);
 		}}, true);
-		Resources.yourRoom.setBtnCost("Actions", "Explore", new HashMap<String, Integer> () {{
-			put (StoreItems.WATER.toString(), 1);
-		}});
+		Resources.yourRoom.setBtnCost("Actions", "Explore", CostMap.costMap.get("Explore"));
 	}
 
 	/**

@@ -9,6 +9,7 @@ import java.util.*;
 import javax.swing.*;
 
 import ExpositoryConstant.*;
+import GameEvents.RandomDustEvents;
 
 public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 	private String MOVED = "MOVED";
@@ -71,6 +72,7 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 			// Move player up
 			case "w":
 				if (Resources.currentFloor.playerCanMove(Direction.UP)) {
+					RandomDustEvents.gotFight();
 					Resources.currentFloor.moveTile(Direction.UP);
 				}
 				break;

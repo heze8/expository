@@ -97,14 +97,14 @@ public class FloorMaps implements ExpositoryConstant {
 		}	
 		
 		
-		String output = "";
-		for (int i = 0; i < WORLD_HEIGHT; i ++) {
-			output = "";
-			for (int j = 0; j < WORLD_WIDTH; j++) {
-				output += rollingMaskMap[i][j] + ", ";
-			}
-			System.out.println(output);
-		}
+//		String output = "";
+//		for (int i = 0; i < WORLD_HEIGHT; i ++) {
+//			output = "";
+//			for (int j = 0; j < WORLD_WIDTH; j++) {
+//				output += rollingMaskMap[i][j] + ", ";
+//			}
+//			System.out.println(output);
+//		}
 		
 		// Normalizing the rollingMaskMap value to ensure it is between 0 and 1
 		for (int i = 0; i < WORLD_HEIGHT; i ++) {

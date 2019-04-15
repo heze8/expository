@@ -19,7 +19,7 @@ public class Resources {
 	public static FloorMaps currentFloor = new FloorMaps();
 	public static Player player = new Player (13, 10);
 	public static Location userLocation = Location.ROOM;
-	public static ExploreBtnEvent currExploreEvent = ExploreBtnEvent.FIND_DOOR;
+	public static ExploreBtnEvent currExploreEvent = ExploreBtnEvent.FIND_NOTHING;
 	public static HashMap<String, Nanobot> NanoBotDetails = new HashMap<String, Nanobot>();
 	
 	public static CardLayout overallContainerCL = new CardLayout();

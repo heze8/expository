@@ -1,11 +1,16 @@
 package GameEvents;
 
 import java.awt.CardLayout;
+import java.awt.Font;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
+import ExpositoryConstant.CostMap;
 import ExpositoryConstant.ExpositoryConstant;
 import ExpositoryConstant.Resources;
 import GUI.LatopText;
@@ -14,6 +19,7 @@ import GUI_Event_Handlers.NanobotListenerImplementation;
 
 public class UserGeneratedRoomEvents implements ExpositoryConstant {
 	private static int numTimesExplored = 0;
+	private static SpaceshipParts blueprint = SpaceshipParts.SOLAR_PANELS;
 	
 	
 	@SuppressWarnings("serial")
@@ -32,11 +38,18 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 				
 				//Prompts User for Name and creates NanoBot to add to pane
 				String nanobotName = "";
-				while (nanobotName.equals("")) {
-					nanobotName = JOptionPane.showInputDialog(null
+				while (true) {
+					 UIManager.put("OptionPane.background", BG_COLOR); 
+					 UIManager.put("Panel.background", BG_COLOR);
+					 UIManager.put("TextField.background", BG_COLOR);
+					 UIManager.put("TextField.foreground", NORMAL_COLOR);
+					 UIManager.put("OptionPane.messageFont", new Font(STORY_FONT, Font.PLAIN, 15));
+					 UIManager.put("OptionPane.messageForeground", NORMAL_COLOR);
+					 nanobotName = JOptionPane.showInputDialog(null
 							, "Enter a name for the NanoBot: "
 							, "Name the Nanobot"
 							, JOptionPane.PLAIN_MESSAGE);
+					 if (!nanobotName.equals("")) break;
 				}
 				Nanobot bot = new Nanobot(nanobotName);
 				bot.addNanobotListener(new NanobotListenerImplementation());
@@ -86,6 +99,7 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 			case 5:
 				Resources.story.displayText("Your water stores is running low");
 				Resources.inven.showInvenGroup("Stores");
+				Resources.yourRoom.setBtnToolTip("Actions", "Explore", CostMap.costMap.get("Explore"));
 				numTimesExplored++;
 				break;
 			case 6:
@@ -108,14 +122,53 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 		
 		case "Scavenge":
 			RandomDustEvents.rngLoot(LootSource.SCAVENGE);
-			if (Resources.inven.getInventory("Stores").getQuantity("Blueprint") != 0) {
+			if (Resources.inven.getInventory(STORES).getQuantity("Blueprint") != 0
+					&& !Resources.yourRoom.btnExist("Actions", "Use Blueprint")) {
 				Resources.yourRoom.addButton("Actions", "Use Blueprint", LONG_WAIT, true);
 				Resources.yourRoom.setBtnCost("Actions", "Use Blueprint", new HashMap<String, Integer>() {{
 					put ("Blueprint", 1);
 				}});
 			}
 			break;
+		case "Use Blueprint":
+			switch (blueprint) {
+			case SOLAR_PANELS:
+				Resources.yourRoom.addButtonGroup("Build", true);
+				addSpaceshipInvenAndBotOption(SpaceshipParts.SOLAR_PANELS);
+				blueprint = SpaceshipParts.ORE_REFINERY;
+				break;
+			case ORE_REFINERY:
+				addSpaceshipInvenAndBotOption(SpaceshipParts.SOLAR_PANELS);
+				blueprint = SpaceshipParts.ALLOY_REFINERY;
+				break;
+			case ALLOY_REFINERY:
+				addSpaceshipInvenAndBotOption(SpaceshipParts.SOLAR_PANELS);
+				blueprint = SpaceshipParts.GLASS_FACTORY;
+				break;
+			case GLASS_FACTORY:
+				addSpaceshipInvenAndBotOption(SpaceshipParts.SOLAR_PANELS);
+				blueprint = null;
+				break;
+			default:
+				Resources.story.displayText("The blueprint did not reveal anything useful");
+				break;
+			}
+			break;
 			
+		case "Solar Panels":
+			Resources.inven.getInventory(WEAPONS).addEntry("Solar Panels", 1);
+			// Add nanobot extra param
+			break;
+		case "Ore Refinery": 
+			Resources.inven.getInventory(WEAPONS).addEntry("Solar Panels", 1);
+			break;
+		case"Alloy Refinery":
+			Resources.inven.getInventory(WEAPONS).addEntry("Solar Panels", 1);
+			break;
+		case "Glass Factory":
+			Resources.inven.getInventory(WEAPONS).addEntry("Solar Panels", 1);
+			break;
+		// Locations
 		case "Unknown":
 		case "A Room":
 		case "Your Room":
@@ -163,5 +216,13 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 			break;
 		}
 
+	}
+
+	private static void addSpaceshipInvenAndBotOption(SpaceshipParts part) {
+		Resources.yourRoom.addButton("Build", part.toString(), NOT_RECLICKABLE, true);
+		Resources.yourRoom.setReclickable("Build", part.toString(), false);
+		Resources.yourRoom.setBtnCost("Build", part.toString(), CostMap.costMap.get(part.toString()));
+		Resources.yourRoom.setBtnToolTip("Build", part.toString(), CostMap.costMap.get(part.toString()));
+		Resources.story.displayText("The blueprint revealed the technical knowledge to build a " + part.toString());
 	}
 }

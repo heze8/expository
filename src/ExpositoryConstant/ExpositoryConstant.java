@@ -1,6 +1,7 @@
 package ExpositoryConstant;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 /*
  * FileName: ExpositoryConstant.java
@@ -62,7 +63,8 @@ public interface ExpositoryConstant {
 	public static enum btnData {
 		JLABEL,
 		COOLDOWN,
-		COST;
+		COST, 
+		RECLICKABLE;
 	}
 	
 	public static enum pressedBtnData {
@@ -94,6 +96,7 @@ public interface ExpositoryConstant {
 	
 	/* Constant for buttons to have various cooldown time */
 	public static final int NO_WAIT = 0;
+	public static final int NOT_RECLICKABLE = 1;
 	public static final int DEFAULT_WAIT = 5;
 	public static final int LONG_WAIT = 10;
 	public static final int NANOBOT_LIFESPAN = 20;
@@ -138,6 +141,27 @@ public interface ExpositoryConstant {
 		}
 	}
 	
+	public enum SpaceshipParts {
+		SOLAR_PANELS("Solar Panels"), 
+		ORE_REFINERY("Ore Refinery"), 
+		ALLOY_REFINERY("Alloy Refinery"),
+		GLASS_FACTORY("Glass Factory");
+//		
+//		(5 water -> 1 electricity)                       
+//		(2 ores 2 electricity - > 1 metal alloy          
+//		, (4 metal alloy 2 electricity -> 1 metal plate) 
+//		 (5 glass shards + 2 electricity -> 1 glass)     
+		
+		private String itemStringName;
+		SpaceshipParts (String itemStringName) {
+			this.itemStringName = itemStringName;
+		}
+		
+		@Override
+		public String toString() {
+			return itemStringName;
+		}
+	}
 	
 	/////////////////////
 	// STORY CONSTANTS //

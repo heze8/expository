@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -22,7 +23,7 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 	
 	private TitledBorder titleBorder;
 	private String title;
-	private boolean isClickable;
+	private boolean reClickable = true;
 	
 	/**
 	 * Constructor for the Button class, creates a title for the set of controls if needed.
@@ -34,6 +35,10 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 		title = controlTitle;
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.setBackground(BG_COLOR);
+		// Adjust the tooltip colour scheme
+		UIManager.put("ToolTip.font", new FontUIResource(STORY_FONT, Font.PLAIN, STORY_FONT_SIZE));
+		UIManager.put("ToolTip.background",BG_COLOR); 
+		UIManager.put("ToolTip.foreground", NORMAL_COLOR); 
 		if (displayTitle) {
 			Border empty = BorderFactory.createEmptyBorder();
 			titleBorder = BorderFactory.createTitledBorder(empty, 
@@ -72,6 +77,7 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
        data.add(newBtn);
        data.add(cooldown);
        data.add(null);
+       data.add(reClickable);
        btnDB.put(name, data);
 	}
 	
@@ -107,23 +113,51 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 		btnDB.put(newName, data);
 	}
 	
+	public boolean btnExist(String btnName) {
+		return btnDB.get(btnName) != null;
+	}
+	
 	/**
-	 * 
-	 * @param btnNameToAddTooltip
-	 * @param tip
+	 * Sets a toolTip for a button
+	 * @param btnNameToAddTooltip of type String, provides the name of the button to add tool tip for
+	 * @param tip of type String, provides the text to be added to the button as a toolTip
 	 */
 	public void setToolTip (String btnNameToAddTooltip, String tip) {
-		UIManager.put("ToolTip.font", new FontUIResource(STORY_FONT, Font.PLAIN, STORY_FONT_SIZE));
-		UIManager.put("ToolTip.background",BG_COLOR); 
-		UIManager.put("ToolTip.foreground", NORMAL_COLOR); 
 		Vector data = btnDB.get(btnNameToAddTooltip);
 		JLabel labelToAddTooltip = (JLabel) data.get(btnData.JLABEL.ordinal());
 		labelToAddTooltip.setToolTipText(tip);
 	}
 	
-	//Wrongly implemented, clickable should pertain to specifc button.
-	public boolean isClickable() {
-		return isClickable;
+	/**
+	 * Sets a toolTip to a button based on the costMap associated with the button
+	 * @param btnNameToAddTooltip of type String, provides the name of the button to add tool tip for
+	 * @param costMap of type HashMap<String, Integer>, provides the costMap that is used to generate 
+	 * the tooltip text
+	 */
+	public void setToolTip (String btnNameToAddTooltip,  HashMap<String, Integer> costMap) {
+		Vector data = btnDB.get(btnNameToAddTooltip);
+		JLabel labelToAddTooltip = (JLabel) data.get(btnData.JLABEL.ordinal());
+		
+		// Creating the toolTip String label
+		String tip = "<HTML>Cost:<br>";
+		for (Map.Entry<String, Integer> costItem : costMap.entrySet()) {
+			tip += costItem.getKey() + ": ";
+			tip += costItem.getValue() + "<br>";
+		}
+		tip += "<HTML>";
+		
+		labelToAddTooltip.setToolTipText(tip);
+	}
+	
+	/**
+	 * Sets whether a button can be reClicked on or not after being clicked
+	 * @param btnName of type String, provides the button name to set reClickability
+	 * @param reClickable of type boolean, false means the button cannot be clicked again 
+	 * after beingn clicked once
+	 */
+	public void setReclickable(String btnName, boolean reClickable) {
+		Vector data = btnDB.get(btnName);
+		data.set(btnData.RECLICKABLE.ordinal(), reClickable);
 	}
 	
 	public void setBtnCost(String btnName, HashMap<String, Integer> costMap) {
@@ -204,6 +238,7 @@ public class Button extends JPanel implements MouseListener, ExpositoryConstant 
 				// Changes button color to show that button is pressed
 				pressed.setForeground(CLICKED_COLOR);
 				pressed.setBackground(CLICKED_COLOR);
+				if(!reClickable) return;
 				clickedBtnDB.put(pressedBtnLabel, new Vector() {{
 					add(pressed.getX());
 					add(pressed.getY());

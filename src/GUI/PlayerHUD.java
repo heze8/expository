@@ -3,12 +3,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.EventListenerList;
 
+import ExpositoryConstant.CostMap;
 import ExpositoryConstant.ExpositoryConstant;
+import ExpositoryConstant.Resources;
 import GUI_Event_Handlers.ButtonListenerImplementation;
 
 public class PlayerHUD extends JPanel implements ExpositoryConstant {
@@ -72,6 +75,7 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 	public void addButton (String btnGroupTitle, String btnName, int cooldown, boolean displayBorder) {
 		Button buttonGroup = buttonsDB.get(btnGroupTitle);
 		buttonGroup.addBtn(btnName, cooldown, displayBorder);
+		repaint();
 	}
 	
 	
@@ -90,14 +94,24 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 		buttonGroup.changeBtnName(oldBtnName, newBtnName);
 	}
 	
-	public void setBtnToolTip (String btnGroupTitle, String btnNameToAddTooltip, String tip) {
+	public boolean btnExist(String btnGroupTitle, String btnName) {
 		Button buttonGroup = buttonsDB.get(btnGroupTitle);
-		buttonGroup.setToolTip(btnNameToAddTooltip, tip);
+		return buttonGroup.btnExist(btnName);
+	}
+	
+	public void setBtnToolTip (String btnGroupTitle, String btnNameToAddTooltip, HashMap<String, Integer> costMap) {
+		Button buttonGroup = buttonsDB.get(btnGroupTitle);
+		buttonGroup.setToolTip(btnNameToAddTooltip, costMap);
 	}
 	
 	public void setBtnCost (String btnGroupTitle, String btnName, HashMap<String, Integer> costMap) {
 		Button buttonGroup = buttonsDB.get(btnGroupTitle);
 		buttonGroup.setBtnCost(btnName, costMap);
+	}
+
+	public void setReclickable(String btnGroupTitle, String btnName, boolean reClickable) {
+		Button buttonGroup = buttonsDB.get(btnGroupTitle);
+		buttonGroup.setReclickable (btnName, reClickable);
 	}
 
 	/**
@@ -134,6 +148,8 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 		PlusMinusBtn plusMinusControl = plusMinusDB.get(btnGroupTitle);
 		plusMinusControl.addPlusMinus(initQuantity, btnName, true);
 	}
+}
+	
 	
 //	public void buttonClicked(ButtonEvent be) {
 //		Object[] listeners = listenerList.getListenerList();
@@ -161,4 +177,3 @@ public class PlayerHUD extends JPanel implements ExpositoryConstant {
 //	public void removeHUDEventListener(HUDEventListener HUDEventListener) {
 //		listenerList.remove(HUDEventListener.class, HUDEventListener);
 //	}
-}
