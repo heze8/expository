@@ -84,6 +84,10 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 			// Move player down
 			case "s":
 				if (Resources.currentFloor.playerCanMove(Direction.DOWN)) {
+					if (Fight.gotFight()) {
+						Resources.combat.generateFight();
+						Resources.dustCL.show(Resources.dustContainer, COMBAT);
+					}
 					Resources.currentFloor.moveTile(Direction.DOWN);
 				}
 				break;			
@@ -91,6 +95,10 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 			// Move player left	
 			case "a":
 				if (Resources.currentFloor.playerCanMove(Direction.LEFT)) {
+					if (Fight.gotFight()) {
+						Resources.combat.generateFight();
+						Resources.dustCL.show(Resources.dustContainer, COMBAT);
+					}
 					Resources.currentFloor.moveTile(Direction.LEFT);
 				}
 				break;
@@ -98,6 +106,10 @@ public class AdventureMapBoard extends JPanel implements ExpositoryConstant {
 			// Move player right
 			case "d":
 				if (Resources.currentFloor.playerCanMove(Direction.RIGHT)) {
+					if (Fight.gotFight()) {
+						Resources.combat.generateFight();
+						Resources.dustCL.show(Resources.dustContainer, COMBAT);
+					}
 					Resources.currentFloor.moveTile(Direction.RIGHT);
 				}
 				break;

@@ -194,13 +194,13 @@ public class FloorMaps implements ExpositoryConstant {
 			else if (elevation > waterLine + 15
 					&& elevation <= waterLine + 35) {
 				toReturn.add("~");
-				toReturn.add(Color.GRAY);
+				toReturn.add(Color.YELLOW);
 			}
 			// Hills 
 			else if (elevation > (255 - 60)
 					&& elevation < (255 - 25)) {
 				toReturn.add("+");
-				toReturn.add(Color.cyan);
+				toReturn.add(Color.GREEN);
 			} 
 			// Mountains
 			else if (elevation > (255 - 25)) {
@@ -210,7 +210,7 @@ public class FloorMaps implements ExpositoryConstant {
 			// forest
 			else {
 				toReturn.add("*");
-				toReturn.add(Color.GREEN);
+				toReturn.add(Color.GRAY);
 			}
 		}
 		return toReturn;
@@ -283,6 +283,9 @@ public class FloorMaps implements ExpositoryConstant {
 	public void updatePlayerLocOnMap(int x, int y) {
 		String prevTerrain = currentTerrain;
 		currentTerrain = (String) tiles[y][x].get(terrain.TILE.ordinal());
+		if (currentTerrain.equals("H")) {
+			Resources.dustCL.show(Resources.dustContainer, DUST);
+		}
 		tiles[y][x].set(terrain.TILE.ordinal(), "@");
 		
 		switch (Resources.player.getMostRecentMove()) {
@@ -304,7 +307,7 @@ public class FloorMaps implements ExpositoryConstant {
 	 */
 	@SuppressWarnings("unchecked")
 	public void setPlayerLocOnMap(int x, int y) {
-		currentTerrain = (String) tiles[y][x].get(terrain.TILE.ordinal());
+		currentTerrain = "H";
 		tiles[y][x].set(terrain.TILE.ordinal(), "@");
 	}
 

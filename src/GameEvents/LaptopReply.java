@@ -18,6 +18,9 @@ public class LaptopReply implements ExpositoryConstant {
 					+ "> :Simulcra.exe\n"
 					+ "> :exit\n"
 					+ USERNAME;
+			} else if(command.equals(":exit")) {
+				Resources.laptop.setLoggingIn(false);
+				Resources.overallContainerCL.show(Resources.mainContainer, MAIN_GUI);
 			} else {
 				return "Incorrect Password\n"
 					+ "User Password > ";

@@ -37,7 +37,6 @@ public class Story extends JPanel implements ExpositoryConstant {
 	public void displayText (String text) {
 		this.removeAll();
 		JLabel toDisplay = createLabel(text);
-		this.add(toDisplay);
         messages.add(toDisplay);
         if (fadeIn) {
         	fadeInText();        	
@@ -66,6 +65,7 @@ public class Story extends JPanel implements ExpositoryConstant {
 		Thread newTextFadeIn = new Thread (new Runnable () {
 			public void run() {
 				JLabel newestMsg = messages.get(messages.size() - 1);
+				add(newestMsg);
 		        Timer timer = new Timer (TEXT_FADE_UPDATE, null);
 				timer.addActionListener(new ActionListener () {
 					int visibilty = INVINSIBLE;
@@ -83,6 +83,7 @@ public class Story extends JPanel implements ExpositoryConstant {
 		        timer.start();
 			}
 		});
+		newTextFadeIn.start();
 		Thread reColoringOldText = new Thread (new Runnable () {
 			public void run() {
 				int visibility = VISIBLE;
@@ -92,7 +93,6 @@ public class Story extends JPanel implements ExpositoryConstant {
 					add(messages.get(i));
 				}
 				repaint();
-				newTextFadeIn.start();
 			}
 		});
 		reColoringOldText.start();
@@ -104,11 +104,12 @@ public class Story extends JPanel implements ExpositoryConstant {
 		}
 		JLabel newestMsg = messages.get(messages.size() - 1);
 		newestMsg.setForeground(NORMAL_COLOR);
-		for (int i = messages.size() - 2; i >= 0; i --) {
+		for (int i = 0; i <=  messages.size() - 2; i ++) {
 			messages.get(i).setForeground(NORMAL_COLOR);
 			add(messages.get(i));
 		}
+		add(newestMsg);
 		repaint();
-		
+		revalidate();
 	}
 }

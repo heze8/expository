@@ -22,17 +22,27 @@ public class Fight extends Story implements ExpositoryConstant {
 			,"You fired the gun" 
 			,"You rose from your cover and risked a shot");
 	private List<String> punchString = Arrays.asList("You threw a punch"
-			 ,"You drove your fist straight at the enemy");
+			 ,"You drove your fist straight ahead");
+	
+	private List<String> upString = Arrays.asList("You moved forward"
+			 ,"You took a step forward");
+	private List<String> downString = Arrays.asList("You moved backwards"
+			 ,"You backed off");
+	private List<String> leftString = Arrays.asList("You moved to the left"
+			,"You took a shuffle step towards the left");
+	private List<String> rightString = Arrays.asList("You moved to the right"
+			,"You took a shuffle step towards the right");
 	private Player player;
 	private Player enemy;
 	private boolean underCover = false;
+	private boolean fightOver = false;
 	private int hits = 0;
+	private int enemyHits = 0;
 	FightStuff [][] fightGrid;
 	
 	public Fight() {
 		super ();
 		super.setFade(false);
-		setKeyBindings();
 	}
 	
 	@Override
@@ -42,7 +52,7 @@ public class Fight extends Story implements ExpositoryConstant {
 	
 	public static boolean gotFight() {
 		double fight = Math.random();
-		return fight < 0.3;
+		return fight < 0.1;
 	}
 	
 	/**
@@ -52,11 +62,17 @@ public class Fight extends Story implements ExpositoryConstant {
 		removeAll();
 		displayText("Fight Started");
 		generatebattleField();
-		Timer enemyMove = new Timer(2 * SEC_TO_MSEC, null);
+		fightOver = false;
+		setKeyBindings();
+		Timer enemyMove = new Timer(5 * SEC_TO_MSEC, null);
 		enemyMove.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if (fightOver) {
+					enemyMove.stop();
+					return;
+				}
 				makeEnemyMove();
 				updateEnemyLocation();
 			}
@@ -155,6 +171,22 @@ public class Fight extends Story implements ExpositoryConstant {
 		actionMap.put(Actions.MELEE.getName(), new KeyAction(Actions.MELEE.getName()));
 	}
 	
+	private void removeKeyBindings() {
+		ActionMap actionMap = getActionMap();
+		int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
+		InputMap inputMap = getInputMap(condition);
+		
+		inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, true));		
+		inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true));		
+		inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, true));
+		inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true));
+		actionMap.remove(Actions.MOVE.getName());
+		inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_P, 0, true));
+		actionMap.remove(Actions.SHOOT.getName());
+		inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, 0, true));
+		actionMap.remove(Actions.MELEE.getName());
+	}
+	
 	/**
 	 * Handles the key input of the user
 	 */
@@ -177,11 +209,14 @@ public class Fight extends Story implements ExpositoryConstant {
 				if (canMove(Moves.UP, player)) {
 					player.move(Direction.UP);
 					updateFigthGrid(Direction.UP, player, FightStuff.PLAYER);
-					displayText("You moved forward");
+					displayText(upString.get(ThreadLocalRandom.current().nextInt(1, upString.size())));
 					updateSurrounding();
 				}
 				else if (player.getY() - 1 >= 0) {
 					displayText("There's a " + fightGrid[player.getY() - 1][player.getX()].getName() + " in front of you");	
+				}
+				else {
+					displayText("There's nowhere left to go up ahead");
 				}
 
 				break;
@@ -191,11 +226,19 @@ public class Fight extends Story implements ExpositoryConstant {
 				if (canMove(Moves.DOWN, player)) {
 					player.move(Direction.DOWN);
 					updateFigthGrid(Direction.DOWN, player, FightStuff.PLAYER);
-					displayText("You moved down");
+					displayText(downString.get(ThreadLocalRandom.current().nextInt(1, downString.size())));
 					updateSurrounding();
 				}
 				else if (player.getY() + 1 < BATTLEFIELD_HEIGHT) {
 					displayText("There's a " + fightGrid[player.getY() + 1][player.getX()].getName() + " behind you");
+				}
+				else {
+					displayText("You retreated from the fight");
+					Resources.dustCL.show(Resources.dustContainer, MAP);
+					fightOver = true;
+				}
+				if (player.getY() == BATTLEFIELD_HEIGHT - 1) {
+					displayText("Another step backwards and you can retreat from the fight");
 				}
 				break;			
 			
@@ -204,11 +247,14 @@ public class Fight extends Story implements ExpositoryConstant {
 				if (canMove(Moves.LEFT, player)) {
 					player.move(Direction.LEFT);
 					updateFigthGrid(Direction.LEFT, player, FightStuff.PLAYER);
-					displayText("You moved left");
+					displayText(leftString.get(ThreadLocalRandom.current().nextInt(1, leftString.size())));
 					updateSurrounding();
 				}
 				else if (player.getX() - 1 >= 0) {
 					displayText("There's a " + fightGrid[player.getY()][player.getX() - 1].getName() + " to your left");
+				}
+				else {
+					displayText("There's nowhere else to go on your left");
 				}
 				break;
 				
@@ -217,11 +263,14 @@ public class Fight extends Story implements ExpositoryConstant {
 				if (canMove(Moves.RIGHT, player)) {
 					player.move(Direction.RIGHT);
 					updateFigthGrid(Direction.RIGHT, player, FightStuff.PLAYER);
-					displayText("You moved right");
+					displayText(rightString.get(ThreadLocalRandom.current().nextInt(1, rightString.size())));
 					updateSurrounding();
 				}
 				else if (player.getX() + 1 < BATTLEFIELD_WIDTH) {
 					displayText("There's a " + fightGrid[player.getY()][player.getX() + 1].getName() + " to your right");
+				}
+				else {
+					displayText("There's no where else to go on the right");
 				}
 				break;
 				
@@ -255,11 +304,13 @@ public class Fight extends Story implements ExpositoryConstant {
 					if (++hits == 2) {
 						displayText("The enemy lies on the ground, unmoving after the blow from your fist");
 						lootAndReturn();
+						fightOver = true;
+						removeKeyBindings();
 						return;
 					}
 					else {
 						displayText("The enemy took a hit and stumbled back");
-						return;
+						return;	
 					}
 					
 				}
@@ -274,6 +325,8 @@ public class Fight extends Story implements ExpositoryConstant {
 						displayText("Your shot found its mark.");
 						displayText("The enemy lays dead on the floor.");
 						lootAndReturn();
+						fightOver = true;
+						removeKeyBindings();
 						return;
 					}
 					else {
@@ -333,40 +386,34 @@ public class Fight extends Story implements ExpositoryConstant {
 	private Position getPosition(int x, int y) {
 		int xDisp = x - player.getX();
 		int yDisp = y - player.getY();
-		if (xDisp == -1) {
-			switch (yDisp) {
-			case 1:
+		if (xDisp < 0) {
+			if (yDisp > 0)
 				return Position.BACK_LEFT;
-			case 0:
+			if (yDisp == 0)
 				return Position.LEFT;
-			case -1:
+			if (yDisp <0)
 				return Position.FRONT_LEFT;
-			}
 		}
 		if (xDisp == 0) {
-			switch (yDisp) {
-			case 1:
+			if (yDisp > 0)
 				return Position.BACK;
-			case -1:
+			if (yDisp < 0)
 				return Position.FRONT;
-			}
 		}
-		if (xDisp == 1) {
-			switch (yDisp) {
-			case 1:
+		if (xDisp > 0) {
+			if (yDisp > 0)
 				return Position.BACK_RIGHT;
-			case 0:
+			if (yDisp == 0)
 				return Position.RIGHT;
-			case -1:
+			if (yDisp < 0)
 				return Position.FRONT_RIGHT;
-			}
 		}
 		return null;
 	}
 
 	private void updateEnemyLocation() {
-//		Position enemyPos = getPosition(enemy.getX(), enemy.getY());
-//		displayText("The enemy lies to your " + enemyPos.getName());
+		Position enemyPos = getPosition(enemy.getX(), enemy.getY());
+		displayText("The enemy is in your " + enemyPos.getName() + " area");
 	}
 
 	private boolean shootable(Player attacker, Player defender) {
@@ -448,7 +495,7 @@ public class Fight extends Story implements ExpositoryConstant {
 			return false;
 		}
 		else {
-			if (personTakingCover.getY() + 1 > BATTLEFIELD_HEIGHT) return false;
+			if (personTakingCover.getY() + 1 >= BATTLEFIELD_HEIGHT) return false;
 			if (fightGrid[personTakingCover.getY() + 1][personTakingCover.getX()] != null 
 					&& fightGrid[personTakingCover.getY() + 1][personTakingCover.getX()] != FightStuff.PLAYER)
 				return true;
@@ -490,8 +537,41 @@ public class Fight extends Story implements ExpositoryConstant {
 			}
 			break;
 		case MELEE:
+			displayText("The enemy throws a punch");
+			if (withinRange(enemy, player)) {
+				if (++enemyHits == 2) {
+					displayText("The blow from your enemy's attack knocked you out");
+					returnToBase();
+					fightOver = true;
+					removeKeyBindings();
+					return;
+				}
+				else {
+					displayText("You stumbled back from the impact");
+					return;	
+				}
+			}
+			else {
+				displayText("It cataches only air");
+			}
 			break;
 		case SHOOT:
+			displayText("The enemy fires a shot");
+			if(shootable(player, enemy)) {
+				double dead = Math.random();
+				if (dead < 0.6) {
+					displayText("The enemy's shot found its mark.");
+					displayText("Your vision turns to black");
+					returnToBase();
+					fightOver = true;
+					removeKeyBindings();
+					return;
+				}
+				else {
+					displayText("The shot went wild, narrowly missing you");
+				}
+			}
+			displayText("The shot whizzes by in a distance");
 			break;
 		default:
 			break;
@@ -499,6 +579,23 @@ public class Fight extends Story implements ExpositoryConstant {
 		}
 	}
 	
+	
+	
+	private void returnToBase() {
+		Timer returnToMap = new Timer (4 * SEC_TO_MSEC, new ActionListener () {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Resources.controllerCL.show(Resources.buttonContainer, YOUR_ROOM);
+				Resources.dustCL.show(Resources.dustContainer, MAP);
+			}
+		});
+		returnToMap.setRepeats(false);
+		returnToMap.start();
+	}
+
+
+
 	private int SCORE = 1;
 	private int MOVE = 0;
 	@SuppressWarnings({ "unchecked", "rawtypes" })
