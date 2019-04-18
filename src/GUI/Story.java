@@ -11,13 +11,27 @@ import ExpositoryConstant.ExpositoryConstant;
 
 public class Story extends JPanel implements ExpositoryConstant {
 	Font font = new Font(STORY_FONT, Font.PLAIN, 20);
-	ArrayList<JLabel> messages = new ArrayList<JLabel>();
+	protected ArrayList<JLabel> messages = new ArrayList<JLabel>();
+	private boolean fadeIn = true;
 	
 	public Story () {
 		this.setFont(font);
 		this.setBackground(BG_COLOR);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		this.setPreferredSize(new Dimension(STORY_WIDTH_PREFF, STORY_HEIGHT_PREFF));
+	}
+	
+	@Override
+	public void setPreferredSize(Dimension preferredSize) {
+	    super.setPreferredSize(new Dimension(STORY_WIDTH_PREFF, STORY_HEIGHT_PREFF));
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+	    return new Dimension(STORY_WIDTH_PREFF, STORY_HEIGHT_PREFF);
+	}
+	
+	public void setFade (boolean b) {
+		fadeIn = b;
 	}
 	
 	public void displayText (String text) {
@@ -25,8 +39,15 @@ public class Story extends JPanel implements ExpositoryConstant {
 		JLabel toDisplay = createLabel(text);
 		this.add(toDisplay);
         messages.add(toDisplay);
-        fadeInText(messages);
+        if (fadeIn) {
+        	fadeInText();        	
+        }
+        else {
+        	displayMsg();
+        }
 	}
+	
+
 	private JLabel createLabel(String text) {
 		JLabel toDisplay = new JLabel();
 		toDisplay.setText("<html>" + text + "</html>");
@@ -37,20 +58,11 @@ public class Story extends JPanel implements ExpositoryConstant {
         return toDisplay;
 	}
 	
-	private void fadeInText(ArrayList<JLabel> messages) {
+	private void fadeInText() {
 		if (messages.size() > MAX_MSG) {
 			messages.remove(0);
 		}
 		
-		final SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-
-			@Override
-			protected String doInBackground() throws Exception {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-		};
 		Thread newTextFadeIn = new Thread (new Runnable () {
 			public void run() {
 				JLabel newestMsg = messages.get(messages.size() - 1);
@@ -86,4 +98,17 @@ public class Story extends JPanel implements ExpositoryConstant {
 		reColoringOldText.start();
 	}
 	
+	private void displayMsg() {
+		if (messages.size() > MAX_MSG) {
+			messages.remove(0);
+		}
+		JLabel newestMsg = messages.get(messages.size() - 1);
+		newestMsg.setForeground(NORMAL_COLOR);
+		for (int i = messages.size() - 2; i >= 0; i --) {
+			messages.get(i).setForeground(NORMAL_COLOR);
+			add(messages.get(i));
+		}
+		repaint();
+		
+	}
 }

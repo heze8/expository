@@ -1,7 +1,11 @@
 package ExpositoryConstant;
 
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 /*
  * FileName: ExpositoryConstant.java
@@ -18,7 +22,7 @@ public interface ExpositoryConstant {
 	public static final Color BG_COLOR = Color.BLACK;
 	public static final Color NORMAL_COLOR = Color.WHITE;
 	
-	/* Constant for random event occurrance */
+	/* Constant for random event occurrence */
 	public static final int RANDOM_OCCURRENCE_DELAY = 10000;
 	
 	/////////////////////////
@@ -34,6 +38,7 @@ public interface ExpositoryConstant {
 	
 	public static final String DUST = "4";
 	public static final String MAP = "5";
+	public static final String COMBAT = "6";
 	
 	/* Enum for locaiton of user within the game HUD */
 	public enum Location {
@@ -127,7 +132,7 @@ public interface ExpositoryConstant {
 		COPPER ("Copper"),
 		WIRES ("Wires"),
 		BATTERIES ("Batteries"),
-		GLASS_SHARDS ("Glass Shards"),
+		GLASS_BITS ("Glass Bits"),
 		GLASS ("Glass");
 		
 		private String itemStringName;
@@ -251,4 +256,94 @@ public interface ExpositoryConstant {
 		EXPLORATION,
 		ROBBING;
 	}
+	
+	/////////////////////
+	// Fight CONSTANTS //
+	/////////////////////
+	public enum FightStuff {
+		PLAYER(1, "Player"),
+		ENEMY(1, "Enemy"),
+		CAR(2, "Car"),
+		TRUCK(3, "Truck"),
+		BUS(4, "Bus"),
+		TREE(1, "Tree"),
+		ROCK(1, "Rock"),
+		BUILDING(3, "Building");
+		
+		private int sizes;
+		private String name;
+		FightStuff (int size, String stuffName) {
+			sizes = size;
+			name = stuffName;
+		}
+		
+		public int getSize() {
+			return sizes;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		private static final List<FightStuff> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+		private static final int SIZE = VALUES.size();
+		private static final Random RANDOM = new Random();
+		public static FightStuff getRandomFightItem()  {
+		  return VALUES.get(RANDOM.nextInt(SIZE));
+		}
+	}
+	
+	public enum Position {
+		FRONT_LEFT("Front Left"),
+		FRONT ("Front"),
+		FRONT_RIGHT ("Front Right"),
+		RIGHT ("Right"),
+		BACK_RIGHT ("Back Right"),
+		BACK ("Back"),
+		BACK_LEFT ("Back Left"),
+		LEFT ("Left");
+		
+		private String name;
+		Position (String stuffName) {
+			name = stuffName;
+		}
+		public String getName() {
+			return name;
+		}
+	}
+	
+	public enum Actions {
+		MOVE("Move"),
+		SHOOT("Shoot"),
+		MELEE("Melee");
+		
+		private String name;
+		Actions (String actionName) {
+			name = actionName;
+		}
+		public String getName() {
+			return name;
+		}
+	}
+	
+	public enum Moves {
+		UP("Up"),
+		DOWN("Down"),
+		LEFT("Left"),
+		RIGHT("Right"),
+		SHOOT("Shoot"),
+		MELEE("Melee");
+		
+		private String name;
+		Moves (String actionName) {
+			name = actionName;
+		}
+		public String getName() {
+			return name;
+		}
+	}
+
+	
+	public static int BATTLEFIELD_WIDTH = 10;
+	public static int BATTLEFIELD_HEIGHT = 10;
 }

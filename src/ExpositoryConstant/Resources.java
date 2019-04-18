@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 
 import Adventure.AdventureMapBoard;
+import Adventure.Fight;
 import Adventure.FloorMaps;
 import Adventure.Player;
 import ExpositoryConstant.ExpositoryConstant.*;
@@ -19,7 +20,7 @@ public class Resources {
 	public static FloorMaps currentFloor = new FloorMaps();
 	public static Player player = new Player (13, 10);
 	public static Location userLocation = Location.ROOM;
-	public static ExploreBtnEvent currExploreEvent = ExploreBtnEvent.FIND_NOTHING;
+	public static ExploreBtnEvent currExploreEvent = ExploreBtnEvent.FIND_DOOR;
 	public static HashMap<String, Nanobot> NanoBotDetails = new HashMap<String, Nanobot>();
 	
 	public static CardLayout overallContainerCL = new CardLayout();
@@ -38,6 +39,7 @@ public class Resources {
 	public static PlayerHUD spaceShip;
 	public static PlayerHUD dust;
 	public static AdventureMapBoard mapBoard;
+	public static Fight combat = new Fight();
 	
 	public static InventoryPanel inven;
 	public static LatopText laptop = new LatopText();
