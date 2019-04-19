@@ -64,6 +64,7 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 				
 				Resources.dust.addButtonGroup("Actions", false);
 				Resources.dust.addButton("Actions", "Scavenge", DEFAULT_WAIT, true);
+				Resources.dust.addButton("Actions", "Embark", LONG_WAIT, true);
 				break;
 			default:
 				break;
@@ -130,6 +131,10 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 				}});
 			}
 			break;
+			
+		case "Embark":
+			Resources.dustCL.show(Resources.dustContainer, MAP);
+			break;
 		case "Use Blueprint":
 			switch (blueprint) {
 			case SOLAR_PANELS:
@@ -138,15 +143,15 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 				blueprint = SpaceshipParts.ORE_REFINERY;
 				break;
 			case ORE_REFINERY:
-				addSpaceshipInvenAndBotOption(SpaceshipParts.SOLAR_PANELS);
+				addSpaceshipInvenAndBotOption(SpaceshipParts.ORE_REFINERY);
 				blueprint = SpaceshipParts.ALLOY_REFINERY;
 				break;
 			case ALLOY_REFINERY:
-				addSpaceshipInvenAndBotOption(SpaceshipParts.SOLAR_PANELS);
+				addSpaceshipInvenAndBotOption(SpaceshipParts.ALLOY_REFINERY);
 				blueprint = SpaceshipParts.GLASS_FACTORY;
 				break;
 			case GLASS_FACTORY:
-				addSpaceshipInvenAndBotOption(SpaceshipParts.SOLAR_PANELS);
+				addSpaceshipInvenAndBotOption(SpaceshipParts.GLASS_FACTORY);
 				blueprint = null;
 				break;
 			default:
@@ -160,14 +165,28 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 			// Add nanobot extra param
 			break;
 		case "Ore Refinery": 
-			Resources.inven.getInventory(WEAPONS).addEntry("Solar Panels", 1);
+			Resources.inven.getInventory(WEAPONS).addEntry("Ore Refinery", 1);
 			break;
 		case"Alloy Refinery":
-			Resources.inven.getInventory(WEAPONS).addEntry("Solar Panels", 1);
+			Resources.inven.getInventory(WEAPONS).addEntry("Alloy Refinery", 1);
 			break;
 		case "Glass Factory":
-			Resources.inven.getInventory(WEAPONS).addEntry("Solar Panels", 1);
+			Resources.inven.getInventory(WEAPONS).addEntry("Glass Factory", 1);
 			break;
+			
+		case "Fly Spaceship":
+			Resources.overallContainerCL.show(Resources.mainContainer, SPACESTATION);
+			break;
+			
+		case "Use Terminal":
+			Resources.overallContainerCL.show(Resources.mainContainer, LAPTOP);	
+			Resources.laptop.setIsInSpace(true);
+			Resources.laptop.bootTerminal();
+			break;
+		case "Return Home":
+			Resources.overallContainerCL.show(Resources.mainContainer, MAIN_GUI);
+			break;
+			
 		// Locations
 		case "Unknown":
 		case "A Room":
@@ -181,6 +200,17 @@ public class UserGeneratedRoomEvents implements ExpositoryConstant {
 			
 			// Sets the User location for event generation
 			Resources.userLocation = Location.ROOM; 
+
+			if (Resources.inven.getInventory(STORES).getQuantity("Spaceship fuel") != 0
+					&& !Resources.yourRoom.btnExist("Actions", "Fly Spaceship")) {
+				Resources.yourRoom.addButton("Actions", "Fly Spaceship", LONG_WAIT, true);
+				Resources.yourRoom.setBtnCost("Actions", "Fly Spaceship", new HashMap<String, Integer>() {{
+					put ("Spaceship fuel", 25);
+				}});
+				Resources.yourRoom.setBtnToolTip("Actions", "Fly Spaceship",  new HashMap<String, Integer>() {{
+					put ("Spaceship fuel", 25);
+				}});
+			}
 			break;
 		case "|    Spaceship":
 		case "|    A Lone Robot":

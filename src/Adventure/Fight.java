@@ -60,7 +60,7 @@ public class Fight extends Story implements ExpositoryConstant {
 	 */
 	public void generateFight() {
 		removeAll();
-		displayText("Fight Started");
+		displayText("A deranged man approaches you with a knife in one hand and a gun in the other");
 		generatebattleField();
 		fightOver = false;
 		setKeyBindings();

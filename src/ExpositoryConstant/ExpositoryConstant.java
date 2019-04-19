@@ -39,6 +39,7 @@ public interface ExpositoryConstant {
 	public static final String DUST = "4";
 	public static final String MAP = "5";
 	public static final String COMBAT = "6";
+	public static final String SPACESTATION = "7";
 	
 	/* Enum for locaiton of user within the game HUD */
 	public enum Location {
@@ -203,7 +204,7 @@ public interface ExpositoryConstant {
 	
 	/* Constant for the password hashCode */
 	public static final float PASSWORD = 1417332055813389L;
-	public static final float AUTHORISATION_CODE = 1999L;
+	public static final float AUTHORISATION_CODE = 3118592586453L;
 	public static final int HASH_CONSTANT = 31;
 	
 	/* Constant for Laptop userName */

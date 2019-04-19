@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 
 import Adventure.AdventureMapBoard;
@@ -43,6 +44,7 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 		//Create swing components to be added to the JPanels
 		Resources.yourRoom = new PlayerHUD();
 		Resources.spaceShip = new PlayerHUD();
+		Resources.spaceStation = new PlayerHUD();
 		Resources.dust = new PlayerHUD();
 		Resources.mapBoard = new AdventureMapBoard();
 		Resources.location = new PlayerHUD();		
@@ -60,8 +62,8 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 		Resources.buttonContainer.add(Resources.yourRoom, YOUR_ROOM);
 		Resources.buttonContainer.add(Resources.spaceShip, SPACESHIP);
 		Resources.buttonContainer.add(Resources.dustContainer, DUST);
-		Resources.dustContainer.add(Resources.mapBoard, MAP);
 		Resources.dustContainer.add(Resources.dust, DUST);
+		Resources.dustContainer.add(Resources.mapBoard, MAP);
 		Resources.dustContainer.add(Resources.combat, COMBAT);
 		
 		//Adding the parent center, @name centerContainer, JPanels to the mainGUI
@@ -70,6 +72,7 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 		//Adding mainGUI JPanel and Laptop class to mainContainer, the overall parent container.
 		Resources.mainContainer.add(Resources.mainGUI, MAIN_GUI);
 		Resources.mainContainer.add(Resources.laptop, LAPTOP);
+		Resources.mainContainer.add(Resources.spaceStation, SPACESTATION);
 		
 		this.add(Resources.mainContainer);
 	
@@ -84,6 +87,7 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 		initRoomControls();
 		initLocationControls();
 		initInventoryGroupd();
+		initSpaceControls();
 	}
 
 	/**
@@ -91,7 +95,7 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 	 */
 	private void initRoomControls() {
 		Resources.yourRoom.addButtonGroup("Actions", false, new HashMap<String, Integer>() {{
-		    put ("Explore", NO_WAIT);
+		    put ("Explore", DEFAULT_WAIT);
 		}}, true);
 		Resources.yourRoom.setBtnCost("Actions", "Explore", CostMap.costMap.get("Explore"));
 	}
@@ -103,6 +107,13 @@ public class MainFrame extends JFrame implements ExpositoryConstant {
 		Resources.location.addButtonGroup("Your Room", false, new HashMap<String, Integer> () {{
 			put ("Unknown", NO_WAIT);
 		}}, false);
+	}
+	
+	private void initSpaceControls() {
+		Resources.spaceStation.addButtonGroup("Actions", false, new HashMap<String, Integer>() {{
+		    put ("Use Terminal", DEFAULT_WAIT);
+		    put ("Return Home", NO_WAIT);
+		}}, true);
 	}
 	
 	/**

@@ -36,6 +36,7 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 	private boolean loggingIn = false;
 	private boolean isExiting = false;
 	private boolean isSimulatingReality = false;
+	private boolean isInSpace = false;
 	
 	public LatopText() {
 		console.setEditable(false);
@@ -61,38 +62,18 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 					+ "> ");
 	}
 	
-
-	public void slowPrint(String text, int delay) {
-		Timer timer = new Timer (delay, null);
-		timer.addActionListener(new ActionListener() {
-			int textPos = 0;
-			@Override
-			public void actionPerformed (ActionEvent e) {
-				printText(String.valueOf(text.charAt(textPos)));
-				if (textPos >= text.length()) {
-					timer.stop();
-				}
-			}
-		});
-		timer.start();
-	}
-	
-	private void fadeIn() {
-		Timer timer = new Timer (TEXT_FADE_UPDATE, null);
-		timer.addActionListener(new ActionListener () {
-			int visibility = INVINSIBLE;
-			@Override
-			public void actionPerformed (ActionEvent e) {
-				visibility += TEXT_FADE_DELAY;
-				if (visibility < VISIBLE) {
-					console.setForeground(new Color (visibility, visibility, visibility));	
-					console.revalidate();
-				} else {
-					timer.stop();
-				}
-			}
-		});
-		timer.start();
+	public void bootTerminal() {
+		console.setText("Tai Chen Space Station Terminal."
+				+ "\n"
+				+ "\nWelcome."
+				+ "\nAll controllers, ,please remember to log-off your system when you go for break."
+				+ "\n"
+				+ "\nWhat would you like to do?"
+				+ "\n"
+				+ "\n> :logoff"
+				+ "\n> :Browse Database"
+				+ "\n"
+				+ "> ");
 	}
 	
 	/* Getter methods for the various state that the Laptop class can be in */
@@ -112,6 +93,10 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 		return isSimulatingReality;
 	}
 	
+	public boolean isInSpace() {
+		return isInSpace;
+	}
+	
 	/* Setter methods for the various state that the Laptop class can be in */
 	public void setExiting (boolean isExiting) {
 		this.isExiting = isExiting;
@@ -127,6 +112,10 @@ public class LatopText extends JScrollPane implements ExpositoryConstant {
 	
 	public void setSimulatingReality (boolean b) {
 		isSimulatingReality = b;
+	}
+	
+	public void setIsInSpace (boolean b) {
+		isInSpace = b; 
 	}
 	
 	/**
