@@ -7,12 +7,7 @@ public class Main {
     SwingUtilities.invokeLater(new Runnable () {
       public void run () {
         MainFrame frame = null;
-		try {
-			frame = new MainFrame("Expository... Will you write me?");
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		frame = new MainFrame("Simulcra");
 		if (frame != null) {
 			frame.playGame();	
 		}
